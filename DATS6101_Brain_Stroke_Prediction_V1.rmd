@@ -72,3 +72,6 @@ Inference-> We donot have any NA/Missing values in any of the Column
 ```{r Check for Outliers, include=TRUE}
 ggplot(BS_Data_raw, aes(y=age)) + geom_boxplot() + labs(y="Age",title = "Age Boxplot")
 ```
+
+```{r Just for Checking}
+```
