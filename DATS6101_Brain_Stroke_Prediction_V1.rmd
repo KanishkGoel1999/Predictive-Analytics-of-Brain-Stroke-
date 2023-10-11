@@ -75,3 +75,6 @@ ggplot(BS_Data_raw, aes(y=age)) + geom_boxplot() + labs(y="Age",title = "Age Box
 
 ```{r Just for Checking}
 ```
+
+```{r Check2}
+```
