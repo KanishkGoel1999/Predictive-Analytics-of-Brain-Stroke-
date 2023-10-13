@@ -1,0 +1,79 @@
+---
+title: "Stroke"
+output: html_document
+date: "2023-10-11"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(devtools)
+devtools::install_github("physicsland/ezids")
+library(ezids)
+```
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+Read the data:
+
+```{r}
+stroke = read.csv("/Users/dineshanandthulasiraman/Documents/Intro to Data Science/full_data.csv")
+head(stroke)
+tail(stroke)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+**Summary of the Stroke Data**
+
+```{r}
+summary_stroke <- xkablesummary(stroke[1, ][c("age","hypertension","heart_disease","stroke")])
+summary_stroke
+```
+
+**Checking for missing values in the data**
+
+```{r}
+missing_values <- is.na(stroke)
+summary(missing_values)
+```
+
+**Boxplot for Hypertension and heart disease by colour stroke**
+
+** From this This graph we understand that the hypertension soly insn't reason for brain stoke
+```{r}
+library(ggplot2)
+ggplot(stroke, aes(x = age)) +
+  geom_histogram(binwidth = 5, fill = "blue", color = "black", alpha = 0.7) +
+  labs(title = "Distribution of Age",
+       x = "Age",
+       y = "Frequency")
+```
+
+**Changing the categorical variable to numeric**
+
+```{r}
+#Changing gender to numerical
+stroke$gender <- as.numeric(factor(stroke$gender))
+
+#Changing work type to numerical
+stroke$work_type <- as.numeric(factor(stroke$work_type))
+
+#Changing the location to numerical
+stroke$Residence_type <- as.numeric(factor(stroke$Residence_type))
+head(stroke)
+tail(stroke)
+```
