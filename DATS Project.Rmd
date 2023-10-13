@@ -4,10 +4,6 @@ output: html_document
 date: "2023-10-11"
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
-
 ```{r}
 library(devtools)
 devtools::install_github("physicsland/ezids")
@@ -27,16 +23,6 @@ head(stroke)
 tail(stroke)
 ```
 
-## Including Plots
-
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
-```
-
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
-
 **Summary of the Stroke Data**
 
 ```{r}
@@ -49,18 +35,6 @@ summary_stroke
 ```{r}
 missing_values <- is.na(stroke)
 summary(missing_values)
-```
-
-**Boxplot for Hypertension and heart disease by colour stroke**
-
-** From this This graph we understand that the hypertension soly insn't reason for brain stoke
-```{r}
-library(ggplot2)
-ggplot(stroke, aes(x = age)) +
-  geom_histogram(binwidth = 5, fill = "blue", color = "black", alpha = 0.7) +
-  labs(title = "Distribution of Age",
-       x = "Age",
-       y = "Frequency")
 ```
 
 **Changing the categorical variable to numeric**
@@ -77,3 +51,44 @@ stroke$Residence_type <- as.numeric(factor(stroke$Residence_type))
 head(stroke)
 tail(stroke)
 ```
+
+**Box plot for Hypertension and heart disease by color stroke**
+
+**From this graph we understand that the brain stroke increase with increase in age and at some point it decreases and it raise once again**
+```{r}
+library(ggplot2)
+ggplot(stroke, aes(x = age)) +
+  geom_histogram(binwidth = 5, fill = "blue", color = "black", alpha = 0.7) +
+  ggtitle("Use theme(plot.title = element_text(hjust = 0.5)) to center") +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  labs(title = "Distribution of Age",
+       x = "Age",
+       y = "Frequency")
+```
+
+**The effect of average glucose level in stroke**
+
+**From this graph we understand that the females has more stroke compared to male**
+```{r}
+library(ggplot2)
+stroke$gender_label <- factor(ifelse(stroke$gender == 1, "male", "female"), levels = c("male", "female"))
+ggplot(stroke, aes(y = gender_label, x = avg_glucose_level, color = stroke)) +
+  geom_point() + 
+  ggtitle("Use theme(plot.title = element_text(hjust = 0.5)) to center") +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  labs(title = "Scatterplot of Average Glucose Level and Gender",y = "Gender", x = "Avg_glucose_level")
+```
+
+**From this graph we understand that the average BMI Count of both gender is under 35 approximately**
+```{r}
+library(ggplot2)
+ggplot(stroke, aes(x = gender, y = bmi, fill = gender)) +
+  geom_boxplot() +
+  labs(
+    title = "Box Plot of BMI by Gender",
+    x = "Gender",
+    y = "BMI"
+  )
+```
+
+**Comparing avg 
