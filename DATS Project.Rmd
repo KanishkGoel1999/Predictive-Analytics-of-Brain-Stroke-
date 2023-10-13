@@ -36,6 +36,12 @@ summary_stroke
 missing_values <- is.na(stroke)
 summary(missing_values)
 ```
+**Changing the work_type children to unemployed**
+
+```{r}
+stroke$work_type <- ifelse(stroke$work_type == "children", "unemployed", stroke$work_type)
+print(stroke)
+```
 
 **Changing the categorical variable to numeric**
 
@@ -48,9 +54,32 @@ stroke$work_type <- as.numeric(factor(stroke$work_type))
 
 #Changing the location to numerical
 stroke$Residence_type <- as.numeric(factor(stroke$Residence_type))
-head(stroke)
-tail(stroke)
+
+#Changing the marriage status to numerical
+stroke$ever_married <- as.numeric(factor(stroke$ever_married))
+
+#Changing the smoking status to numerical
+stroke$smoking_status <- as.numeric(factor(stroke$smoking_status))
+
+final <- stroke
+head(final)
+tail(final)
 ```
+**Age Categories**
+
+```{r}
+age_breaks <- c(0, 10, 18, 60, Inf)
+age_labels <- c("Children", "School", "Adult", "Senior Citizen")
+
+# Create a new column with age categories
+stroke$Category <- cut(stroke$age, breaks = age_breaks, labels = age_labels)
+
+# Print the dataset
+print(stroke)
+
+```
+
+
 
 **Box plot for Hypertension and heart disease by color stroke**
 
@@ -91,4 +120,3 @@ ggplot(stroke, aes(x = gender, y = bmi, fill = gender)) +
   )
 ```
 
-**Comparing avg 
