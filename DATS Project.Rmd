@@ -18,7 +18,7 @@ When you click the **Knit** button a document will be generated that includes bo
 Read the data:
 
 ```{r}
-stroke = read.csv("/Users/dineshanandthulasiraman/Documents/Intro to Data Science/full_data.csv")
+stroke = read.csv("full_data.csv")
 head(stroke)
 tail(stroke)
 ```
