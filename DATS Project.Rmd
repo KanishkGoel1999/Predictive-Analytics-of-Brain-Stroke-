@@ -43,7 +43,7 @@ stroke$work_type <- ifelse(stroke$work_type == "children", "unemployed", stroke$
 print(stroke)
 ```
 
-**Changing the categorical variable to numeric**
+**Changing the all categorical variable to numeric v9ariables**
 
 ```{r}
 #Changing gender to numerical
@@ -65,7 +65,8 @@ final <- stroke
 head(final)
 tail(final)
 ```
-**Age Categories**
+
+**Introducing the Age Categories**
 
 ```{r}
 age_breaks <- c(0, 10, 18, 60, Inf)
@@ -74,14 +75,12 @@ age_labels <- c("Children", "School", "Adult", "Senior Citizen")
 # Create a new column with age categories
 stroke$Category <- cut(stroke$age, breaks = age_breaks, labels = age_labels)
 
-# Print the dataset
+# Print the data set
 print(stroke)
 
 ```
 
-
-
-**Box plot for Hypertension and heart disease by color stroke**
+**Histogram for distribution for Age**
 
 **From this graph we understand that the brain stroke increase with increase in age and at some point it decreases and it raise once again**
 ```{r}
