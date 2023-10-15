@@ -36,6 +36,7 @@ summary_stroke
 missing_values <- is.na(stroke)
 summary(missing_values)
 ```
+
 **Changing the work_type children to unemployed**
 
 ```{r}
@@ -43,7 +44,7 @@ stroke$work_type <- ifelse(stroke$work_type == "children", "unemployed", stroke$
 print(stroke)
 ```
 
-**Changing the all categorical variable to numeric v9ariables**
+**Changing the all categorical variable to numeric variables**
 
 ```{r}
 #Changing gender to numerical

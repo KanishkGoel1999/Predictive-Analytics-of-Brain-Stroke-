@@ -36,6 +36,7 @@ summary_stroke
 missing_values <- is.na(stroke)
 summary(missing_values)
 ```
+
 **Changing the work_type children to unemployed**
 
 ```{r}
@@ -43,7 +44,7 @@ stroke$work_type <- ifelse(stroke$work_type == "children", "unemployed", stroke$
 print(head(stroke))
 ```
 
-**Changing the categorical variable to numeric**
+**Changing the all categorical variable to numeric variables**
 
 ```{r}
 #Changing gender to numerical
@@ -65,7 +66,8 @@ final <- stroke
 head(final)
 tail(final)
 ```
-**Age Categories**
+
+**Introducing the Age Categories**
 
 ```{r}
 age_breaks <- c(0, 10, 18, 60, Inf)
@@ -81,9 +83,9 @@ print(head(stroke))
 
 
 
-**Box plot for Hypertension and heart disease by color stroke**
+**Histogram for distribution for Age**
 
-**From this graph we understand that the brain stroke increase with increase in age and at some point it decreases and it raise once again**
+**From this graph we understand that there are more people from age group 40-60**
 ```{r}
 library(ggplot2)
 ggplot(stroke, aes(x = age)) +
@@ -97,7 +99,7 @@ ggplot(stroke, aes(x = age)) +
 
 **The effect of average glucose level in stroke**
 
-**From this graph we understand that the females has more stroke compared to male**
+**From this graph we understand that the females has more average glucose level compared to male**
 ```{r}
 library(ggplot2)
 stroke$gender_label <- factor(ifelse(stroke$gender == 1, "male", "female"), levels = c("male", "female"))
@@ -109,6 +111,7 @@ ggplot(stroke, aes(y = gender_label, x = avg_glucose_level, color = stroke)) +
 ```
 
 **From this graph we understand that the average BMI Count of both gender is under 35 approximately**
+
 ```{r}
 library(ggplot2)
 ggplot(stroke, aes(x = gender, y = bmi, fill = gender)) +
