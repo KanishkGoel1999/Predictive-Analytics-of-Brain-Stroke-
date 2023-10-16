@@ -30,6 +30,13 @@ summary_stroke <- xkablesummary(stroke[1, ][c("age","hypertension","heart_diseas
 summary_stroke
 ```
 
+**Summary of the Average Glucose Level and BMI Data**
+
+```{r}
+summary_astroke <- xkablesummary(stroke[1, ][c("avg_glucose_level","bmi")])
+summary_astroke
+```
+
 **Checking for missing values in the data**
 
 ```{r}
@@ -76,12 +83,17 @@ age_labels <- c("Children", "School", "Adult", "Senior Citizen")
 # Create a new column with age categories
 stroke$Category <- cut(stroke$age, breaks = age_breaks, labels = age_labels)
 
-# Print the dataset
+# Print the data set
 print(head(stroke))
 
 ```
 
+**Finding outliers of BMI in the data**
 
+```{r}
+bmi_outliers <- ezids::outlierKD2(stroke,bmi, rm=TRUE, boxplt=FALSE, histogram=FALSE, qqplt=TRUE)
+sum(is.na(bmi_outliers))
+```
 
 **Histogram for distribution for Age**
 
@@ -97,13 +109,13 @@ ggplot(stroke, aes(x = age)) +
        y = "Frequency")
 ```
 
-**The effect of average glucose level in stroke**
+**The effect of average glucose level in hypertension**
 
 **From this graph we understand that the females has more average glucose level compared to male**
 ```{r}
 library(ggplot2)
 stroke$gender_label <- factor(ifelse(stroke$gender == 1, "male", "female"), levels = c("male", "female"))
-ggplot(stroke, aes(y = gender_label, x = avg_glucose_level, color = stroke)) +
+ggplot(stroke, aes(y = gender_label, x = avg_glucose_level, color = hypertension)) +
   geom_point() + 
   ggtitle("Use theme(plot.title = element_text(hjust = 0.5)) to center") +
   theme(plot.title = element_text(hjust = 0.5)) +
@@ -114,8 +126,10 @@ ggplot(stroke, aes(y = gender_label, x = avg_glucose_level, color = stroke)) +
 
 ```{r}
 library(ggplot2)
-ggplot(stroke, aes(x = gender, y = bmi, fill = gender)) +
+ggplot(stroke, aes(x = gender, y = bmi,color = gender_label)) +
   geom_boxplot() +
+  ggtitle("Use theme(plot.title = element_text(hjust = 0.5)) to center") +
+  theme(plot.title = element_text(hjust = 0.5)) +
   labs(
     title = "Box Plot of BMI by Gender",
     x = "Gender",
