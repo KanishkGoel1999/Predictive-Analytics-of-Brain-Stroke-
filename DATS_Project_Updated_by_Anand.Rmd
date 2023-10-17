@@ -406,3 +406,161 @@ contable_hyp_heart <- table(stroke$hypertension, stroke$heart_disease)
 chitest_hyp_heart <- chisq.test(contable_hyp_heart)
 chitest_hyp_heart
 ```
+
+**What are modifiable and non-modifiable risk factors for stroke in healthy people?**<br/>
+We can take features like avg_glucose_level, bmi and smoking_status.
+```{r}
+#get responsible features from main dataset
+healthy_features <- stroke[,8:11]
+healthy_features$smoking_status <- replace(healthy_features$smoking_status, healthy_features$smoking_status==4, 3)
+```
+<br/>
+For smoking status and stroke, we use chi square goodness of fit test as they are two categorical variables.<br/>
+$H_0:$ smoking and stroke are independent features<br/>
+$H_1:$ smoking and stroke are not independent
+```{r}
+# contingency table for smoking_status and stroke
+contingency_table_smoking <- table(healthy_features$smoking_status, healthy_features$stroke)
+print(contingency_table_smoking)
+chi_smoke_status = chisq.test(contingency_table_smoking)
+print(chi_smoke_status)
+```
+<br/>
+As p-value for the test is low, we reject null hypothesis. Now we plot bar for smoking_status vs stroke.
+```{r}
+# add smoking categories
+healthy_features <- healthy_features %>%
+  mutate(smoke_type = case_when(
+    smoking_status == 1 ~ "Never smoked",
+    smoking_status == 2 ~ "Formerly smoked",
+    smoking_status == 3 ~ "Regular smoker"
+  ))
+
+# create barplot
+ggplot(data = healthy_features, aes(x = `smoking_status`, fill = smoke_type)) +
+  geom_bar(position = "stack",col="black") +
+  labs(title = "Brain Strokes numbers for people",
+       x = "Smoking Status",
+       y = "Count of Brain Strokes") +
+  theme(plot.title = element_text(hjust = 0.5))
+```
+<br/>
+For BMI and stroke, we do a 2-sample test considering them as numerical features.<br/>
+$H_0$: bmi and stroke are independent<br/>
+$H_1$: bmi and stroke are not independent
+
+```{r}
+# two sample t-test
+two_sample_bmi <- t.test(healthy_features$bmi, healthy_features$stroke)
+two_sample_bmi
+```
+<br/>
+As p-value for the test is low, we reject null hypothesis. Now we plot bar for BMI vs stroke.
+```{r}
+# add bmi_status column
+healthy_features <- healthy_features %>%
+  mutate(bmi_status = case_when(
+    bmi > 25  ~ "Unhealthy",
+    bmi < 18.5 ~ "Unhealthy",
+  ))
+# create barplot between bmi_status and stroke
+ggplot(data = healthy_features, aes(x = `bmi`, fill = `bmi_status`)) +
+  geom_bar(position = "stack") +
+  labs(title = "Brain Strokes numbers for people",
+       x = "BMI",
+       y = "Count of Brain Strokes") +
+  theme(plot.title = element_text(hjust = 0.5))
+```
+<br/>
+This depicts bmi and stroke are normally distributed.<br/>
+
+For avg glucose level and stroke we use 2-sample t-test considering themas numercial variables.<br/>
+$H_0$: agl and stroke are independent<br/>
+$H_1$: agl and stroke are not independent
+```{r}
+# 2 sample t-test
+two_sample_agl <- t.test(healthy_features$avg_glucose_level, healthy_features$stroke)
+print(two_sample_agl)
+```
+<br/>
+Plot histogram for average glucose level and stroke
+```{r}
+# add column for agl_status based on avg_glucose_level
+healthy_features <- healthy_features %>%
+  mutate(agl_status = case_when(
+    avg_glucose_level > 100  ~ "Unhealthy",
+    avg_glucose_level < 70 ~ "Unhealthy",
+  ))
+
+# create plot and fill by agl_status 
+ggplot(data = healthy_features, aes(x = `avg_glucose_level`, fill = `agl_status`)) +
+  geom_histogram(position = "stack",col="black") +
+  labs(title = "Brain Strokes numbers for people",
+       x = "Average glucose level",
+       y = "Count of Brain Strokes") +
+  theme(plot.title = element_text(hjust = 0.5))
+```
+<br/>
+Average glucose level and stroke are normally distributed
+
+<br/>
+Now combining all features together and test healthy people with stroke. As two are categorical, we use chi square test.<br/>
+$H_0$: Health and stroke are independent<br/>
+$H_1$: Health and stroke are not independent
+```{r}
+# Create a column for health_status
+healthy_features<- transform(healthy_features, health_status=ifelse(avg_glucose_level<100 & avg_glucose_level>70 & bmi<25 & bmi>18.5, 1,0))
+
+healthy_table <- table(healthy_features$health_status, healthy_features$stroke)
+chigoodness = chisq.test(healthy_table)
+print(chigoodness$p.value)
+```
+<br/>
+Due to low p-value, we reject null hypothesis. <br/>
+
+Barplot between health feature and stroke
+```{r}
+#Create plot for health_status vs stroke
+ggplot(data = healthy_features, aes(x = `healthy_col`, fill='healthy_col')) +
+  geom_bar(position = "stack",col="black", fill=c("red","green")) +
+  labs(title = "Brain Strokes numbers for people",
+       x = "Health of people",
+       y = "Count of Brain Strokes") +
+  theme(plot.title = element_text(hjust = 0.5))
+
+```
+
+<br/>
+**Q. What married life and gender are associated with an increased risk of stroke?**<br/>
+We combine two columns to form another column. As two are categorical, we use chi square test.<br/>
+$H_0:$ The variables are independent<br/>
+$H_1:$ The variables are not independent
+```{r}
+# Create a dataframe with factors responsible for married_living 
+df_married_living <- stroke[c('gender', 'ever_married', 'stroke')]
+
+df_married_living <- df_married_living %>%
+  mutate(married_living = case_when(
+    gender==2 & ever_married==2 ~ 'Married male',
+    gender==2 & ever_married==1 ~ 'Unmarried male',
+    gender==1 & ever_married==2 ~ 'Married female',
+    gender==1 & ever_married==1 ~ 'Unmarried female'
+  ))
+# contingency status for married_living and stroke
+con_table <- table(df_married_living$married_living, df_married_living$stroke)
+print(con_table)
+chi_test <- chisq.test(con_table)
+print(chi_test)
+table(df_married_living$gender,df_married_living$ever_married)
+```
+<br/>
+Due to low p-value, we reject $H_0$.<br/>
+```{r}
+# Create plot between married_living and stroke
+ggplot(data = df_married_living, aes(x = `married_living`, fill=married_living)) +
+  geom_bar(position = "stack",col="black") +
+  labs(title = "Brain Strokes numbers for people",
+       x = "Married life of people",
+       y = "Count of Brain Strokes") +
+  theme(plot.title = element_text(hjust = 0.5))
+```
