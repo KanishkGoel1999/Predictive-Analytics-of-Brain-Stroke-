@@ -327,21 +327,35 @@ ggplot(data = brain_stroke_yes_percentage, aes(x = Residence_type, y = Percentag
 ```
 
 **Does brain stroke depend on ever-married?**
-```{r}
-brain_stroke_yes$ever_married <- factor(brain_stroke_yes$ever_married, levels = c("1", "2"), labels = c("unmarried", "married"))
 
+```{r Chi-Square Test to determine if brain stroke and ever-married are independent, include=TRUE}
+# Chi-squared test of ever_married and stroke
 contable_marr_str <- table(stroke$ever_married, stroke$stroke)
 chitest_marr_str <- chisq.test(contable_marr_str)
 chitest_marr_str
+```
 
-brain_stroke_yes_marriedpercentage <- brain_stroke_yes %>%
-  group_by(ever_married) %>%
-  summarise(Percentage = (n() / total_cases) * 100)
+```{r Percentage wise stroke for ever-married}
+# changing the labels of "ever_married"
+brain_stroke_yes$ever_married <- factor(brain_stroke_yes$ever_married, levels = c("1", "2"), labels = c("unmarried(with stroke)", "married(with stroke)"))
+brain_stroke_no$ever_married <- factor(brain_stroke_no$ever_married, levels = c("1", "2"), labels = c("unmarried(without stroke)", "married(without stroke)"))
 
-ggplot(brain_stroke_yes_marriedpercentage, aes(x=ever_married, y=Percentage, fill=ever_married)) + 
+married <- subset(stroke, ever_married==2)
+unmarried <- subset(stroke, ever_married==1)
+total_cases_married <- nrow(married)
+total_cases_notmarried <- nrow(unmarried)
+
+# Calculating the percentage of ever-married in group with stroke and without stroke respectively
+married_str_percentage = nrow(subset(married, married$stroke==1)) / total_cases_married
+unmarried_str_percentage = nrow(subset(unmarried, unmarried$stroke==1)) / total_cases_notmarried
+Percentageofstr_married <- c(married_str_percentage, unmarried_str_percentage)
+ever_married <- c("ever-married", "not ever-married")
+married_strpercentage <- data.frame(Percentageofstr_married, ever_married)
+
+# Creating the bar plot with percentage on the y-axis
+ggplot(married_strpercentage, aes(x=ever_married, y=Percentageofstr_married, fill=ever_married)) + 
   geom_bar(stat = "identity", col = "black", width = 0.7) + 
-  labs(x = "Ever married or not", y = "Count of brain strokes", title = "Brain Strokes by Ever-married")
-
+  labs(x = "Ever Married or Not", y = "Percentage of Strokes", title = "Percentage of Strokes by Ever-married or Not")
 ```
 
 ```{r}
