@@ -325,3 +325,70 @@ ggplot(data = brain_stroke_yes_percentage, aes(x = Residence_type, y = Percentag
   scale_y_continuous(labels = scales::percent_format(scale = 1)) +  # Format y-axis as percentage
   theme(plot.title = element_text(hjust = 0.5))
 ```
+
+**Does brain stroke depend on ever-married?**
+```{r}
+brain_stroke_yes$ever_married <- factor(brain_stroke_yes$ever_married, levels = c("1", "2"), labels = c("unmarried", "married"))
+
+contable_marr_str <- table(stroke$ever_married, stroke$stroke)
+chitest_marr_str <- chisq.test(contable_marr_str)
+chitest_marr_str
+
+brain_stroke_yes_marriedpercentage <- brain_stroke_yes %>%
+  group_by(ever_married) %>%
+  summarise(Percentage = (n() / total_cases) * 100)
+
+ggplot(brain_stroke_yes_marriedpercentage, aes(x=ever_married, y=Percentage, fill=ever_married)) + 
+  geom_bar(stat = "identity", col = "black", width = 0.7) + 
+  labs(x = "Ever married or not", y = "Count of brain strokes", title = "Brain Strokes by Ever-married")
+
+```
+
+```{r}
+contable_marr_age <- table(stroke$ever_married, stroke$Category)
+chitest_marr_age <- chisq.test(contable_marr_age)
+chitest_marr_age
+```
+
+**How do hypertension and heart disease influence brain stroke?**
+```{r}
+brain_stroke_yes$hypertension <- factor(brain_stroke_yes$hypertension, levels = c("0", "1"), labels = c("no hypertension", "have hypertension"))
+
+total_cases_yes <- nrow(brain_stroke_yes)
+total_cases_no <- nrow(brain_stroke_no)
+
+Percentage_hyper <- c(nrow(subset(brain_stroke_yes, hypertension == "have hypertension"))/total_cases_yes, nrow(subset(brain_stroke_yes, hypertension == "have hypertension"))/total_cases_no)
+hyper <- c("hypertension with stroke", "hypertension without stroke")
+brain_stroke_yes_hyperpercentage <- data.frame(Percentage_hyper, hyper)
+
+ggplot(brain_stroke_yes_hyperpercentage, aes(x=hyper, y=Percentage_hyper, fill=hyper)) + 
+  geom_bar(stat = "identity", col = "black", width = 0.7) + 
+  labs(x = "With/without stroke", y = "Percentage of hypertension", title = "Percentage of Hypertension by Stroke")
+
+
+brain_stroke_yes$heart_disease <- factor(brain_stroke_yes$heart_disease, levels = c("0", "1"), labels = c("no heart disease", "have heart disease"))
+
+Percentage_heart <- c(nrow(subset(brain_stroke_yes, heart_disease == "have heart disease"))/total_cases_yes, nrow(subset(brain_stroke_yes, heart_disease == "have heart disease"))/total_cases_no)
+heart <- c("heart disease with stroke", "heart disease without stroke")
+brain_stroke_yes_heartpercentage <- data.frame(Percentage_heart, heart)
+
+ggplot(brain_stroke_yes_heartpercentage, aes(x=heart, y=Percentage_heart, fill=heart)) + 
+  geom_bar(stat = "identity", col = "black", width = 0.7) + 
+  labs(x = "With/without stroke", y = "Percentage of heart disease", title = "Percentage of Heart Disease by Stroke")
+```
+
+```{r Chi-squared Test to determine the independence between hypertension, heart disease and brain stroke}
+library("corrplot")
+hyp_heart_str_cor <- cor(data.frame(stroke$hypertension, stroke$heart_disease, stroke$stroke))
+corrplot(hyp_heart_str_cor)
+
+contable_hyp_str <- table(stroke$hypertension, stroke$stroke)
+chitest_hyp_str <- chisq.test(contable_hyp_str)
+chitest_hyp_str
+contable_heart_str <- table(stroke$heart_disease, stroke$stroke)
+chitest_heart_str <- chisq.test(contable_heart_str)
+chitest_heart_str
+contable_hyp_heart <- table(stroke$hypertension, stroke$heart_disease)
+chitest_hyp_heart <- chisq.test(contable_hyp_heart)
+chitest_hyp_heart
+```
