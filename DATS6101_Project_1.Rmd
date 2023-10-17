@@ -365,30 +365,51 @@ chitest_marr_age
 ```
 
 **How do hypertension and heart disease influence brain stroke?**
-```{r}
-brain_stroke_yes$hypertension <- factor(brain_stroke_yes$hypertension, levels = c("0", "1"), labels = c("no hypertension", "have hypertension"))
 
-total_cases_yes <- nrow(brain_stroke_yes)
-total_cases_no <- nrow(brain_stroke_no)
+```{r Percentage wise stroke for hypertension and heart disease}
+# changing the labels of "hypertension"
+# brain_stroke_yes$hypertension <- factor(brain_stroke_yes$hypertension, levels = c("0", "1"), labels = c("no hypertension", "have hypertension"))
+# brain_stroke_no$hypertension <- factor(brain_stroke_no$hypertension, levels = c("0", "1"), labels = c("no hypertension", "have hypertension"))
 
-Percentage_hyper <- c(nrow(subset(brain_stroke_yes, hypertension == "have hypertension"))/total_cases_yes, nrow(subset(brain_stroke_yes, hypertension == "have hypertension"))/total_cases_no)
-hyper <- c("hypertension with stroke", "hypertension without stroke")
-brain_stroke_yes_hyperpercentage <- data.frame(Percentage_hyper, hyper)
+with_hyper <- subset(stroke, hypertension==1)
+without_hyper <- subset(stroke, hypertension==0)
+total_cases_withhyper <- nrow(with_hyper)
+total_cases_withouthyper <- nrow(without_hyper)
 
-ggplot(brain_stroke_yes_hyperpercentage, aes(x=hyper, y=Percentage_hyper, fill=hyper)) + 
+# total_cases_yes <- nrow(brain_stroke_yes)
+# total_cases_no <- nrow(brain_stroke_no)
+
+# Calculating the percentage of hypertension in group with stroke and without stroke respectively
+withhyper_str_percentage <- nrow(subset(with_hyper, with_hyper$stroke==1)) / total_cases_withhyper 
+withouthyper_str_percentage = nrow(subset(without_hyper, without_hyper$stroke==1)) / total_cases_withouthyper
+Percentageofstr_hyper <- c(withhyper_str_percentage, withouthyper_str_percentage)
+hyper <- c("with hypertension", "without hypertension")
+hyper_strpercentage <- data.frame(Percentageofstr_hyper, hyper)
+
+ggplot(hyper_strpercentage, aes(x=hyper, y=Percentageofstr_hyper, fill=hyper)) + 
   geom_bar(stat = "identity", col = "black", width = 0.7) + 
-  labs(x = "With/without stroke", y = "Percentage of hypertension", title = "Percentage of Hypertension by Stroke")
+  labs(x = "With/without Hypertension", y = "Percentage of Strokes", title = "Percentage of Strokes by Hypertension")
 
 
-brain_stroke_yes$heart_disease <- factor(brain_stroke_yes$heart_disease, levels = c("0", "1"), labels = c("no heart disease", "have heart disease"))
+# changing the labels of "heart_disease"
+# brain_stroke_yes$heart_disease <- factor(brain_stroke_yes$heart_disease, levels = c("0", "1"), labels = c("no heart disease", "have heart disease"))
+# brain_stroke_no$heart_disease <- factor(brain_stroke_no$heart_disease, levels = c("0", "1"), labels = c("no heart disease", "have heart disease"))
 
-Percentage_heart <- c(nrow(subset(brain_stroke_yes, heart_disease == "have heart disease"))/total_cases_yes, nrow(subset(brain_stroke_yes, heart_disease == "have heart disease"))/total_cases_no)
-heart <- c("heart disease with stroke", "heart disease without stroke")
-brain_stroke_yes_heartpercentage <- data.frame(Percentage_heart, heart)
+with_heart <- subset(stroke, heart_disease==1)
+without_heart <- subset(stroke, heart_disease==0)
+total_cases_withheart <- nrow(with_heart)
+total_cases_withoutheart <- nrow(without_heart)
 
-ggplot(brain_stroke_yes_heartpercentage, aes(x=heart, y=Percentage_heart, fill=heart)) + 
+# Calculating the percentage of heart disease in group with stroke and without stroke respectively
+withheart_strpercentage <- nrow(subset(with_heart, with_heart$stroke==1)) / total_cases_withheart
+withoutheart_strpercentage = nrow(subset(without_heart, without_heart$stroke==1)) / total_cases_withoutheart
+Percentageofstr_heart <- c(withheart_strpercentage, withoutheart_strpercentage)
+heart <- c("with heart disease", "without heart disease")
+heart_strpercentage <- data.frame(Percentageofstr_heart, heart)
+
+ggplot(heart_strpercentage, aes(x=heart, y=Percentageofstr_heart, fill=heart)) + 
   geom_bar(stat = "identity", col = "black", width = 0.7) + 
-  labs(x = "With/without stroke", y = "Percentage of heart disease", title = "Percentage of Heart Disease by Stroke")
+  labs(x = "With/without Heart Disease", y = "Percentage of Strokes", title = "Percentage of Strokes by Heart Disease")
 ```
 
 ```{r Chi-squared Test to determine the independence between hypertension, heart disease and brain stroke}
