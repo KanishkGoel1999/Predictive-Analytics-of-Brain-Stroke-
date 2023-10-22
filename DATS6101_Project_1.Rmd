@@ -499,8 +499,12 @@ ggplot(data = healthy_features, aes(x = `bmi`, fill = `bmi_status`)) +
        y = "Count of Brain Strokes") +
   theme(plot.title = element_text(hjust = 0.5))
 ```
+```{r}
+qqnorm(healthy_features$bmi, main="Body mass index", col='green') 
+qqline(healthy_features$bmi)
+```
 <br/>
-This depicts bmi and stroke are normally distributed.<br/>
+This depicts body mass index and stroke are normally distributed.<br/>
 
 For avg glucose level and stroke we use 2-sample t-test considering themas numercial variables.<br/>
 $H_0$: agl and stroke are independent<br/>
@@ -528,8 +532,12 @@ ggplot(data = healthy_features, aes(x = `avg_glucose_level`, fill = `agl_status`
        y = "Count of Brain Strokes") +
   theme(plot.title = element_text(hjust = 0.5))
 ```
+```{r}
+qqnorm(healthy_features$avg_glucose_level, main="Average glucose level", col='green') 
+qqline(healthy_features$avg_glucose_level)
+```
 <br/>
-Average glucose level and stroke are normally distributed
+Distribution for average glucose level and stroke rightly skewed
 
 <br/>
 Now combining all features together and test healthy people with stroke. As two are categorical, we use chi square test.<br/>
