@@ -364,7 +364,8 @@ ggplot(married_strpercentage, aes(x=ever_married, y=Percentageofstr_married, fil
   labs(x = "Ever Married or Not", y = "Percentage of Strokes", title = "Percentage of Strokes by Ever-married or Not")
 ```
 
-```{r}
+```{r Chi-Square Test to determine if brain ever-married and age are independent}
+# Chi-squared test of ever_married and age
 contable_marr_age <- table(stroke$ever_married, stroke$Category)
 chitest_marr_age <- chisq.test(contable_marr_age)
 chitest_marr_age
