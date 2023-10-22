@@ -496,6 +496,15 @@ chi_smoke_status = chisq.test(contingency_table_smoking)
 print(chi_smoke_status)
 ```
 <br/>
+
+Normality Check for Body Mass Index
+```{r}
+qqnorm(healthy_features$bmi, main="Body mass index", col='green') 
+qqline(healthy_features$bmi)
+```
+
+This depicts body mass index is normally distributed
+
 As p-value for the test is low, we reject null hypothesis. Now we plot bar for smoking_status vs stroke.
 ```{r}
 # add smoking categories
@@ -542,7 +551,13 @@ ggplot(data = healthy_features, aes(x = `bmi`, fill = `bmi_status`)) +
   theme(plot.title = element_text(hjust = 0.5))
 ```
 <br/>
-This depicts bmi and stroke are normally distributed.<br/>
+
+Normality check for Average Glucose Level
+```{r}
+qqnorm(healthy_features$avg_glucose_level, main="Average glucose level", col='green') 
+qqline(healthy_features$avg_glucose_level)
+```
+Distribution for average glucose level is not normally distributed.
 
 For avg glucose level and stroke we use 2-sample t-test considering themas numercial variables.<br/>
 $H_0$: agl and stroke are independent<br/>
