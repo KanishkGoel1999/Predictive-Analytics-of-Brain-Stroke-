@@ -1,6 +1,5 @@
 ---
 title: "Predictive Analytics of Brain Stroke Vulnerability via Lifestyle and Health Factors Analysis"
-author: "Anand Raj"
 date: "`r Sys.Date()`"
 output:
   html_document:
@@ -9,9 +8,9 @@ output:
     toc: yes
     toc_depth: 3
     toc_float: yes
-  pdf_document:
-    toc: yes
-    toc_depth: '3'
+  #pdf_document:
+    #toc: yes
+    #toc_depth: '3'
 ---
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
@@ -98,9 +97,23 @@ avg_glucose_outliers <- ezids::outlierKD2(stroke,avg_glucose_level, rm=TRUE, box
 
 We have found 43 outliers in BMI and 602 in average glucose level.
 
+**Checking Skewness of Age, BMI and Average Glucose Level**
+
+```{r}
+library(psych)
+skew_age <- skew(stroke$age)
+print(skew_age)
+skew_glucose <- skew(stroke$avg_glucose_level)
+print(skew_glucose)
+skew_BMI <- skew(stroke$bmi)
+print(skew_BMI)
+```
+
+
+The skewness of age indicates a slight leftward skew in the data distribution, with more values concentrated on the right side of the mean, but the distribution is approximately symmetric. A skewness value of average glucose level and BMI indicates a right skewed distribution, with a longer tail on the right side of the mean. This suggests that there are more data points on the left side of the mean.
+
 **Histogram for distribution for Age**
 
-**From this graph we understand that there are more people from age group 40-60**
 ```{r}
 library(ggplot2)
 ggplot(stroke, aes(x = age)) +
