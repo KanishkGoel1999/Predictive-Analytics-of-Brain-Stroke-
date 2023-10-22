@@ -548,7 +548,7 @@ Due to low p-value, we reject null hypothesis. <br/>
 Barplot between health feature and stroke
 ```{r}
 #Create plot for health_status vs stroke
-ggplot(data = healthy_features, aes(x = `healthy_col`, fill='healthy_col')) +
+ggplot(data = healthy_features, aes(x = `health_status`, fill='health_status')) +
   geom_bar(position = "stack",col="black", fill=c("red","green")) +
   labs(title = "Brain Strokes numbers for people",
        x = "Health of people",
