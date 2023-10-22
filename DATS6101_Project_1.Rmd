@@ -1,0 +1,637 @@
+---
+title: "Predictive Analytics of Brain Stroke Vulnerability via Lifestyle and Health Factors Analysis"
+author: "Anand Raj"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    code_folding: hide
+    number_sections: false
+    toc: yes
+    toc_depth: 3
+    toc_float: yes
+  pdf_document:
+    toc: yes
+    toc_depth: '3'
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r Importing the data set, include=F} 
+stroke = read.csv("full_data.csv")
+print(head(stroke))
+```
+
+**Importing and Summary of the Stroke Data**
+
+```{r}
+summary(stroke)
+```
+
+We are choosing on the numerical variable age, average glucose level and BMI.
+
+Age: The mean and median do not have a huge difference, therefore less likely to have outliers.
+Avg_glucose_level: The mean and median have a significant difference and, therefore likely to have outliers.
+BMI: The mean and median do not have a huge difference, therefore less likely to have outliers.
+
+**Checking for missing values in the data**
+
+```{r Checking for missing values in the data, include=F}
+missing_values <- is.na(stroke)
+summary(missing_values)
+```
+
+There are no missing values in the data
+
+**Changing the work_type children to unemployed**
+
+```{r Changing the work_type children to unemployed,include=F}
+stroke$work_type <- ifelse(stroke$work_type == "children", "unemployed", stroke$work_type)
+print(head(stroke))
+```
+
+**Changing the all categorical variable to numeric variables**
+
+```{r}
+#Changing gender to numerical
+stroke$gender <- as.numeric(factor(stroke$gender))
+
+#Changing work type to numerical
+stroke$work_type <- as.numeric(factor(stroke$work_type))
+
+#Changing the location to numerical
+stroke$Residence_type <- as.numeric(factor(stroke$Residence_type))
+
+#Changing the marriage status to numerical
+stroke$ever_married <- as.numeric(factor(stroke$ever_married))
+
+#Changing the smoking status to numerical
+stroke$smoking_status <- as.numeric(factor(stroke$smoking_status))
+
+final <- stroke
+head(final)
+tail(final)
+```
+
+**Introducing the Age Categories**
+
+I have grouped age into four categories such as Children, Student, Adult and Senior Citizen
+
+```{r}
+age_breaks <- c(0, 10, 18, 60, Inf)
+age_labels <- c("Children", "Student", "Adult", "Senior Citizen")
+
+# Create a new column with age categories
+stroke$Category <- cut(stroke$age, breaks = age_breaks, labels = age_labels)
+
+# Print the data set
+print(head(stroke))
+
+```
+
+**Finding outliers of BMI and average glucose level in the data**
+
+```{r}
+bmi_outliers <- ezids::outlierKD2(stroke,bmi, rm=TRUE, boxplt=FALSE, histogram=FALSE, qqplt=TRUE)
+avg_glucose_outliers <- ezids::outlierKD2(stroke,avg_glucose_level, rm=TRUE, boxplt=FALSE, histogram=FALSE, qqplt=TRUE) 
+```
+
+We have found 43 outliers in BMI and 602 in average glucose level.
+
+**Histogram for distribution for Age**
+
+**From this graph we understand that there are more people from age group 40-60**
+```{r}
+library(ggplot2)
+ggplot(stroke, aes(x = age)) +
+  geom_histogram(binwidth = 5, fill = "blue", color = "black", alpha = 0.7) +
+  ggtitle("Use theme(plot.title = element_text(hjust = 0.5)) to center") +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  labs(title = "Distribution of Age",
+       x = "Age",
+       y = "Frequency")
+```
+
+The distribution is having thick tail on both the sides.
+
+**Histogram for distribution for Average Glucose level**
+
+```{r}
+ggplot(stroke, aes(x = avg_glucose_level)) +
+  geom_histogram(binwidth = 5, fill = "lightgreen", color = "black", alpha = 0.7) +
+  ggtitle("Use theme(plot.title = element_text(hjust = 0.5)) to center") +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  labs(title = "Distribution of Average glucose level",
+       x = "Average glucose level",
+       y = "Frequency")
+```
+
+The graph is right skewed then the mean is greater than median. The distribution is not symmetrical. Most data points are concentrated on left.
+
+**Distribution of BMI**
+
+```{r}
+ggplot(stroke, aes(x = bmi)) +
+  geom_histogram(binwidth = 5, fill = "lightblue", color = "black", alpha = 0.7) +
+  ggtitle("Use theme(plot.title = element_text(hjust = 0.5))") +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  labs(title = "Distribution of BMI",
+       x = "BMI",
+       y = "Frequency")
+```
+
+The graph is almost normally distributed then the mean and median will almost be equal. The graph is also be symmetrical.
+
+**The effect of average glucose level in hypertension**
+
+```{r}
+library(ggplot2)
+stroke$gender_label <- factor(ifelse(stroke$gender == 1, "male", "female"), levels = c("male", "female"))
+ggplot(stroke, aes(y = gender_label, x = avg_glucose_level, color = hypertension)) +
+  geom_point() + 
+  ggtitle("Use theme(plot.title = element_text(hjust = 0.5)) to center") +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  labs(title = "Scatterplot of Average Glucose Level and Gender",y = "Gender", x = "Avg_glucose_level")
+```
+From this graph we understand that the females has more average glucose level compared to male
+
+```{r}
+library(ggplot2)
+ggplot(stroke, aes(x = gender, y = bmi,color = gender_label)) +
+  geom_boxplot() +
+  ggtitle("Use theme(plot.title = element_text(hjust = 0.5)) to center") +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  labs(
+    title = "Box Plot of BMI by Gender",
+    x = "Gender",
+    y = "BMI"
+  )
+```
+
+From this graph we understand that the average BMI Count of both gender is under 35 approximately
+
+
+```{r}
+library(ggplot2)
+ggplot(stroke, aes(x = gender, y = avg_glucose_level,color = gender_label)) +
+  geom_boxplot() +
+  ggtitle("Use theme(plot.title = element_text(hjust = 0.5)) to center") +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  labs(
+    title = "Box Plot of Average Glocose Level by Gender",
+    x = "Gender",
+    y = "Average Glocose Level"
+  )
+```
+
+From this graph we understand that the average glucose level is right skewed.
+
+**What are the age-specific incidence and mortality rates of brain stroke?**
+
+Null Hypothesis(H0): Age and stroke variables are independent.
+
+Alternative Hypothesis(Ha): Age and stroke are not independent.
+
+```{r Chi-Square Test to determine if brain stroke and age group are independent, include=TRUE}
+Contingency_Table_Age <- table(stroke$Category , stroke$stroke)
+Chi_Square_Test_Age_BS <- chisq.test(Contingency_Table_Age)
+print(Chi_Square_Test_Age_BS$p.value)
+```
+
+The p-value for this test is <0.05 (Standard Significane level), therefore we reject Null Hypothesis. 
+Hence we can conclude that Age and stroke are not independent.
+Age group significantly matters in chances of having a brain stroke.
+
+**Which category in age has highest number of Brain Strokes**
+
+```{r Highest brain strokes in which category, include=TRUE}
+print(Contingency_Table_Age)
+
+```
+
+```{r}
+brain_stroke_yes <- subset(stroke,stroke == 1)
+brain_stroke_no <- subset(stroke,stroke == 0)
+```
+
+```{r Visualization for highest number of deaths in age category, include=TRUE}
+ggplot(data = brain_stroke_yes, aes(x = `Category`, fill = `Category`)) +
+  geom_bar(position = "stack",col="black", fill="Orange") +
+  labs(title = "Brain Strokes by Age Category",
+       x = "Age Category",
+       y = "Count of Brain Strokes") +
+  theme(plot.title = element_text(hjust = 0.5))
+```
+
+```{r Percentage wise barplot for Age Category, include=TRUE}
+library(dplyr)
+
+# Calculate the total number of cases
+total_cases <- nrow(brain_stroke_yes)
+
+# Calculate the percentage of brain strokes for each age category
+brain_stroke_yes_percentage <- brain_stroke_yes %>%
+  group_by(Category) %>%
+  summarise(Percentage = (n() / total_cases) * 100)
+
+# Create the bar plot with percentages
+ggplot(data = brain_stroke_yes_percentage, aes(x = `Category`, y = Percentage, fill = `Category`)) +
+  geom_bar(stat = "identity", col = "black", width = 0.7, position = "stack") +
+  labs(title = "Brain Strokes by Age Category (Percentage)",
+       x = "Age Category",
+       y = "Percentage of Brain Strokes") +
+  scale_y_continuous(labels = scales::percent_format(scale = 1)) +  # Format y-axis as percentage
+  theme(plot.title = element_text(hjust = 0.5))
+
+```
+
+The "Senior Citizen" age group exhibits the highest likelihood of experiencing a brain stroke, accounting for nearly 70% of cases
+
+**What is the case fatality rate of stroke by gender, location, and work type**
+
+Null Hypothesis(H0): Worktype and stroke variables are independent.
+
+Alternative Hypothesis(Ha): Worktype and stroke are not independent.
+
+```{r Chi-Square Test to determine if brain stroke and wortype are independent, include=TRUE}
+Contingency_Table_worktype <- table(stroke$work_type , stroke$stroke)
+Chi_Square_Test_worktype_BS <- chisq.test(Contingency_Table_worktype)
+print(Chi_Square_Test_worktype_BS$p.value)
+```
+
+The p-value for this test is <0.05 (Standard Significane level), therefore we reject Null Hypothesis. 
+Hence we can conclude that worktype and stroke are not independent.
+Worktype significantly matters in chances of having a brain stroke.
+
+
+**Which category in worktype has highest number of Brain Strokes***
+```{r Visualization for highest number of deaths in worktype category, include=TRUE}
+ggplot(data = brain_stroke_yes, aes(x = `work_type`, fill = `work_type`)) +
+  geom_bar(position = "stack",col="black", fill="Green",show.legend = TRUE) +
+  labs(title = "Brain Strokes by Worktype Category",
+       x = "Work Type",
+       y = "Count of Brain Strokes") +
+  scale_fill_manual(values = c("1" = "blue", "2" = "green", "3" = "red", "4" = "purple"),
+                    labels = c("Government Job", "Private", "Self Employed", "Children")) +
+  theme(plot.title = element_text(hjust = 0.5))
+```
+```{r Percentage Wise barplot for Worktype, include=TRUE}
+
+brain_stroke_yes <- brain_stroke_yes %>%
+  mutate(work_type_named = case_when(
+    work_type == 1 ~ "Government Job",
+    work_type == 2 ~ "Private",
+    work_type == 3 ~ "Self-Employed",
+    work_type == 4 ~ "Children"
+  ))
+
+
+# Calculate the percentage of brain strokes for each age category
+brain_stroke_yes_percentage <- brain_stroke_yes %>%
+  group_by(work_type_named) %>%
+  summarise(Percentage = (n() / total_cases) * 100)
+
+# Create the bar plot with percentages
+ggplot(data = brain_stroke_yes_percentage, aes(x = `work_type_named`, y = Percentage, fill = `work_type_named`)) +
+  geom_bar(stat = "identity", col = "black", width = 0.7, position = "stack") +
+  labs(title = "Brain Strokes by Worktype (Percentage)",
+       x = "Worktype",
+       y = "Percentage of Brain Strokes") +
+  scale_y_continuous(labels = scales::percent_format(scale = 1)) +  # Format y-axis as percentage
+  theme(plot.title = element_text(hjust = 0.5))
+
+```
+
+The highest number of Brain strokes is for the Private working people.
+
+**Does brain stroke depend on gender type?**
+
+Null Hypothesis(H0): Gender and stroke variables are independent.
+
+Alternative Hypothesis(Ha): Gender and stroke are not independent.
+
+```{r Chi-Square Test to determine if brain stroke and Worktype are independent, include=TRUE}
+Contingency_Table_Gender <- table(stroke$gender , stroke$stroke)
+Chi_Square_Test_Gender_BS <- chisq.test(Contingency_Table_Gender)
+print(Chi_Square_Test_Gender_BS$p.value)
+```
+
+```{r Percentage wise stroke for Gender, include=TRUE}
+
+# Calculate the percentage of brain strokes for each gender category
+brain_stroke_yes_percentage <- brain_stroke_yes %>%
+  group_by(gender_label) %>%
+  summarise(Percentage = (n() / total_cases) * 100)
+
+# Create the bar plot with percentages on the y-axis
+ggplot(data = brain_stroke_yes_percentage, aes(x = gender_label, y = Percentage, fill = gender_label)) +
+  geom_bar(stat = "identity", col = "black", width = 0.7, position = "stack") +
+  labs(title = "Percentage of Strokes by Gender",
+       x = "Gender",
+       y = "Percentage of Strokes") +
+  scale_y_continuous(labels = scales::percent_format(scale = 1)) +  # Format y-axis as percentage
+  theme(plot.title = element_text(hjust = 0.5))
+
+```
+
+p-value is greater than 0.05 (Standard Significance level) and therefore we accept Null Hypothesis and so 
+we can conclude that brain stroke doesn't depend on gender type.
+
+**Does brain stroke depend on Location type?**
+
+Null Hypothesis(H0): Location and stroke variables are independent.
+
+Alternative Hypothesis(Ha): Location and stroke are not independent.
+
+```{r Chi-Square Test to determine if brain stroke and Location are independent, include=TRUE}
+Contingency_Table_Location <- table(stroke$Residence_type , stroke$stroke)
+Chi_Square_Test_Location_BS <- chisq.test(Contingency_Table_Location)
+print(Chi_Square_Test_Location_BS$p.value)
+```
+
+p-value is greater than 0.05 (Standard Significance level) and therefore we accept Null Hypothesis and so 
+we can conclude that brain stroke doesn't depend on Location of residence.
+
+```{r Percentage wise stroke for Location, include=TRUE}
+
+brain_stroke_yes <- brain_stroke_yes %>%
+  mutate(Residence_type = case_when(
+    Residence_type == 1 ~ "Rural",
+    Residence_type == 2 ~ "Urban"
+  ))
+
+# Calculate the percentage of brain strokes for each location category
+brain_stroke_yes_percentage <- brain_stroke_yes %>%
+  group_by(Residence_type) %>%
+  summarise(Percentage = (n() / total_cases) * 100)
+
+# Create the bar plot with percentages on the y-axis
+ggplot(data = brain_stroke_yes_percentage, aes(x = Residence_type, y = Percentage, fill = Residence_type)) +
+  geom_bar(stat = "identity", col = "black", width = 0.7, position = "stack") +
+  labs(title = "Percentage of Strokes by Residence type",
+       x = "Type of Residence",
+       y = "Percentage of Strokes") +
+  scale_y_continuous(labels = scales::percent_format(scale = 1)) +  # Format y-axis as percentage
+  theme(plot.title = element_text(hjust = 0.5))
+```
+
+**Does brain stroke depend on ever-married?**
+
+```{r Chi-Square Test to determine if brain stroke and ever-married are independent, include=TRUE}
+# Chi-squared test of ever_married and stroke
+contable_marr_str <- table(stroke$ever_married, stroke$stroke)
+chitest_marr_str <- chisq.test(contable_marr_str)
+chitest_marr_str
+```
+
+```{r Percentage wise stroke for ever-married}
+# changing the labels of "ever_married"
+brain_stroke_yes$ever_married <- factor(brain_stroke_yes$ever_married, levels = c("1", "2"), labels = c("unmarried(with stroke)", "married(with stroke)"))
+brain_stroke_no$ever_married <- factor(brain_stroke_no$ever_married, levels = c("1", "2"), labels = c("unmarried(without stroke)", "married(without stroke)"))
+
+married <- subset(stroke, ever_married==2)
+unmarried <- subset(stroke, ever_married==1)
+total_cases_married <- nrow(married)
+total_cases_notmarried <- nrow(unmarried)
+
+# Calculating the percentage of ever-married in group with stroke and without stroke respectively
+married_str_percentage = nrow(subset(married, married$stroke==1)) / total_cases_married
+unmarried_str_percentage = nrow(subset(unmarried, unmarried$stroke==1)) / total_cases_notmarried
+Percentageofstr_married <- c(married_str_percentage, unmarried_str_percentage)
+ever_married <- c("ever-married", "not ever-married")
+married_strpercentage <- data.frame(Percentageofstr_married, ever_married)
+
+# Creating the bar plot with percentage on the y-axis
+ggplot(married_strpercentage, aes(x=ever_married, y=Percentageofstr_married, fill=ever_married)) + 
+  geom_bar(stat = "identity", col = "black", width = 0.7) + 
+  labs(x = "Ever Married or Not", y = "Percentage of Strokes", title = "Percentage of Strokes by Ever-married or Not")
+```
+
+```{r}
+contable_marr_age <- table(stroke$ever_married, stroke$Category)
+chitest_marr_age <- chisq.test(contable_marr_age)
+chitest_marr_age
+```
+
+**How do hypertension and heart disease influence brain stroke?**
+
+```{r Percentage wise stroke for hypertension and heart disease}
+# changing the labels of "hypertension"
+# brain_stroke_yes$hypertension <- factor(brain_stroke_yes$hypertension, levels = c("0", "1"), labels = c("no hypertension", "have hypertension"))
+# brain_stroke_no$hypertension <- factor(brain_stroke_no$hypertension, levels = c("0", "1"), labels = c("no hypertension", "have hypertension"))
+
+with_hyper <- subset(stroke, hypertension==1)
+without_hyper <- subset(stroke, hypertension==0)
+total_cases_withhyper <- nrow(with_hyper)
+total_cases_withouthyper <- nrow(without_hyper)
+
+# total_cases_yes <- nrow(brain_stroke_yes)
+# total_cases_no <- nrow(brain_stroke_no)
+
+# Calculating the percentage of hypertension in group with stroke and without stroke respectively
+withhyper_str_percentage <- nrow(subset(with_hyper, with_hyper$stroke==1)) / total_cases_withhyper 
+withouthyper_str_percentage = nrow(subset(without_hyper, without_hyper$stroke==1)) / total_cases_withouthyper
+Percentageofstr_hyper <- c(withhyper_str_percentage, withouthyper_str_percentage)
+hyper <- c("with hypertension", "without hypertension")
+hyper_strpercentage <- data.frame(Percentageofstr_hyper, hyper)
+
+ggplot(hyper_strpercentage, aes(x=hyper, y=Percentageofstr_hyper, fill=hyper)) + 
+  geom_bar(stat = "identity", col = "black", width = 0.7) + 
+  labs(x = "With/without Hypertension", y = "Percentage of Strokes", title = "Percentage of Strokes by Hypertension")
+
+
+# changing the labels of "heart_disease"
+# brain_stroke_yes$heart_disease <- factor(brain_stroke_yes$heart_disease, levels = c("0", "1"), labels = c("no heart disease", "have heart disease"))
+# brain_stroke_no$heart_disease <- factor(brain_stroke_no$heart_disease, levels = c("0", "1"), labels = c("no heart disease", "have heart disease"))
+
+with_heart <- subset(stroke, heart_disease==1)
+without_heart <- subset(stroke, heart_disease==0)
+total_cases_withheart <- nrow(with_heart)
+total_cases_withoutheart <- nrow(without_heart)
+
+# Calculating the percentage of heart disease in group with stroke and without stroke respectively
+withheart_strpercentage <- nrow(subset(with_heart, with_heart$stroke==1)) / total_cases_withheart
+withoutheart_strpercentage = nrow(subset(without_heart, without_heart$stroke==1)) / total_cases_withoutheart
+Percentageofstr_heart <- c(withheart_strpercentage, withoutheart_strpercentage)
+heart <- c("with heart disease", "without heart disease")
+heart_strpercentage <- data.frame(Percentageofstr_heart, heart)
+
+ggplot(heart_strpercentage, aes(x=heart, y=Percentageofstr_heart, fill=heart)) + 
+  geom_bar(stat = "identity", col = "black", width = 0.7) + 
+  labs(x = "With/without Heart Disease", y = "Percentage of Strokes", title = "Percentage of Strokes by Heart Disease")
+```
+
+```{r Chi-squared Test to determine the independence between hypertension, heart disease and brain stroke}
+library("corrplot")
+hyp_heart_str_cor <- cor(data.frame(stroke$hypertension, stroke$heart_disease, stroke$stroke))
+corrplot(hyp_heart_str_cor)
+
+contable_hyp_str <- table(stroke$hypertension, stroke$stroke)
+chitest_hyp_str <- chisq.test(contable_hyp_str)
+chitest_hyp_str
+contable_heart_str <- table(stroke$heart_disease, stroke$stroke)
+chitest_heart_str <- chisq.test(contable_heart_str)
+chitest_heart_str
+contable_hyp_heart <- table(stroke$hypertension, stroke$heart_disease)
+chitest_hyp_heart <- chisq.test(contable_hyp_heart)
+chitest_hyp_heart
+```
+
+**What are modifiable and non-modifiable risk factors for stroke in healthy people?**<br/>
+We can take features like avg_glucose_level, bmi and smoking_status.
+```{r}
+#get responsible features from main dataset
+healthy_features <- stroke[,8:11]
+healthy_features$smoking_status <- replace(healthy_features$smoking_status, healthy_features$smoking_status==4, 3)
+```
+<br/>
+For smoking status and stroke, we use chi square goodness of fit test as they are two categorical variables.<br/>
+$H_0:$ smoking and stroke are independent features<br/>
+$H_1:$ smoking and stroke are not independent
+```{r}
+# contingency table for smoking_status and stroke
+contingency_table_smoking <- table(healthy_features$smoking_status, healthy_features$stroke)
+print(contingency_table_smoking)
+chi_smoke_status = chisq.test(contingency_table_smoking)
+print(chi_smoke_status)
+```
+<br/>
+As p-value for the test is low, we reject null hypothesis. Now we plot bar for smoking_status vs stroke.
+```{r}
+# add smoking categories
+healthy_features <- healthy_features %>%
+  mutate(smoke_type = case_when(
+    smoking_status == 1 ~ "Never smoked",
+    smoking_status == 2 ~ "Formerly smoked",
+    smoking_status == 3 ~ "Regular smoker"
+  ))
+
+# create barplot
+ggplot(data = healthy_features, aes(x = `smoking_status`, fill = smoke_type)) +
+  geom_bar(position = "stack",col="black") +
+  labs(title = "Brain Strokes numbers for people",
+       x = "Smoking Status",
+       y = "Count of Brain Strokes") +
+  theme(plot.title = element_text(hjust = 0.5))
+```
+<br/>
+For BMI and stroke, we do a 2-sample test considering them as numerical features.<br/>
+$H_0$: bmi and stroke are independent<br/>
+$H_1$: bmi and stroke are not independent
+
+```{r}
+# two sample t-test
+two_sample_bmi <- t.test(healthy_features$bmi, healthy_features$stroke)
+two_sample_bmi
+```
+<br/>
+As p-value for the test is low, we reject null hypothesis. Now we plot bar for BMI vs stroke.
+```{r}
+# add bmi_status column
+healthy_features <- healthy_features %>%
+  mutate(bmi_status = case_when(
+    bmi > 25  ~ "Unhealthy",
+    bmi < 18.5 ~ "Unhealthy",
+  ))
+# create barplot between bmi_status and stroke
+ggplot(data = healthy_features, aes(x = `bmi`, fill = `bmi_status`)) +
+  geom_bar(position = "stack") +
+  labs(title = "Brain Strokes numbers for people",
+       x = "BMI",
+       y = "Count of Brain Strokes") +
+  theme(plot.title = element_text(hjust = 0.5))
+```
+<br/>
+This depicts bmi and stroke are normally distributed.<br/>
+
+For avg glucose level and stroke we use 2-sample t-test considering themas numercial variables.<br/>
+$H_0$: agl and stroke are independent<br/>
+$H_1$: agl and stroke are not independent
+```{r}
+# 2 sample t-test
+two_sample_agl <- t.test(healthy_features$avg_glucose_level, healthy_features$stroke)
+print(two_sample_agl)
+```
+<br/>
+Plot histogram for average glucose level and stroke
+```{r}
+# add column for agl_status based on avg_glucose_level
+healthy_features <- healthy_features %>%
+  mutate(agl_status = case_when(
+    avg_glucose_level > 100  ~ "Unhealthy",
+    avg_glucose_level < 70 ~ "Unhealthy",
+  ))
+
+# create plot and fill by agl_status 
+ggplot(data = healthy_features, aes(x = `avg_glucose_level`, fill = `agl_status`)) +
+  geom_histogram(position = "stack",col="black") +
+  labs(title = "Brain Strokes numbers for people",
+       x = "Average glucose level",
+       y = "Count of Brain Strokes") +
+  theme(plot.title = element_text(hjust = 0.5))
+```
+<br/>
+Average glucose level and stroke are normally distributed
+
+<br/>
+Now combining all features together and test healthy people with stroke. As two are categorical, we use chi square test.<br/>
+$H_0$: Health and stroke are independent<br/>
+$H_1$: Health and stroke are not independent
+```{r}
+# Create a column for health_status
+healthy_features<- transform(healthy_features, health_status=ifelse(avg_glucose_level<100 & avg_glucose_level>70 & bmi<25 & bmi>18.5, 1,0))
+
+healthy_table <- table(healthy_features$health_status, healthy_features$stroke)
+chigoodness = chisq.test(healthy_table)
+print(chigoodness$p.value)
+```
+<br/>
+Due to low p-value, we reject null hypothesis. <br/>
+
+Barplot between health feature and stroke
+```{r}
+#Create plot for health_status vs stroke
+ggplot(data = healthy_features, aes(x = `health_status`, fill='health_status')) +
+  geom_bar(position = "stack",col="black", fill=c("red","green")) +
+  labs(title = "Brain Strokes numbers for people",
+       x = "Health of people",
+       y = "Count of Brain Strokes") +
+  theme(plot.title = element_text(hjust = 0.5))
+
+```
+
+<br/>
+**Q. What married life and gender are associated with an increased risk of stroke?**<br/>
+We combine two columns to form another column. As two are categorical, we use chi square test.<br/>
+$H_0:$ The variables are independent<br/>
+$H_1:$ The variables are not independent
+```{r}
+# Create a dataframe with factors responsible for married_living 
+df_married_living <- stroke[c('gender', 'ever_married', 'stroke')]
+
+df_married_living <- df_married_living %>%
+  mutate(married_living = case_when(
+    gender==2 & ever_married==2 ~ 'Married male',
+    gender==2 & ever_married==1 ~ 'Unmarried male',
+    gender==1 & ever_married==2 ~ 'Married female',
+    gender==1 & ever_married==1 ~ 'Unmarried female'
+  ))
+# contingency status for married_living and stroke
+con_table <- table(df_married_living$married_living, df_married_living$stroke)
+print(con_table)
+chi_test <- chisq.test(con_table)
+print(chi_test)
+table(df_married_living$gender,df_married_living$ever_married)
+```
+<br/>
+Due to low p-value, we reject $H_0$.<br/>
+```{r}
+# Create plot between married_living and stroke
+ggplot(data = df_married_living, aes(x = `married_living`, fill=married_living)) +
+  geom_bar(position = "stack",col="black") +
+  labs(title = "Brain Strokes numbers for people",
+       x = "Married life of people",
+       y = "Count of Brain Strokes") +
+  theme(plot.title = element_text(hjust = 0.5))
+```
+
