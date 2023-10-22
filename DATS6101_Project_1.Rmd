@@ -1,44 +1,51 @@
 ---
-title: "Stroke"
-output: html_document
-date: "2023-10-11"
+title: "Predictive Analytics of Brain Stroke Vulnerability via Lifestyle and Health Factors Analysis"
+author: "Anand Raj"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    code_folding: hide
+    number_sections: false
+    toc: yes
+    toc_depth: 3
+    toc_float: yes
+  pdf_document:
+    toc: yes
+    toc_depth: '3'
 ---
-
-```{r}
-library(devtools)
-devtools::install_github("physicsland/ezids")
-library(ezids)
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
 ```
-## R Markdown
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
-
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
-
-Read the data:
-
-```{r}
+```{r Importing the data set, include=F} 
 stroke = read.csv("full_data.csv")
-head(stroke)
-tail(stroke)
+print(head(stroke))
 ```
 
-**Summary of the Stroke Data**
+**Importing and Summary of the Stroke Data**
 
 ```{r}
 summary(stroke)
 ```
 
+We are choosing on the numerical variable age, average glucose level and BMI.
+
+Age: The mean and median do not have a huge difference, therefore less likely to have outliers.
+Avg_glucose_level: The mean and median have a significant difference and, therefore likely to have outliers.
+BMI: The mean and median do not have a huge difference, therefore less likely to have outliers.
+
 **Checking for missing values in the data**
 
-```{r}
+```{r Checking for missing values in the data, include=F}
 missing_values <- is.na(stroke)
 summary(missing_values)
 ```
 
+There are no missing values in the data
+
 **Changing the work_type children to unemployed**
 
-```{r}
+```{r Changing the work_type children to unemployed,include=F}
 stroke$work_type <- ifelse(stroke$work_type == "children", "unemployed", stroke$work_type)
 print(head(stroke))
 ```
@@ -68,9 +75,11 @@ tail(final)
 
 **Introducing the Age Categories**
 
+I have grouped age into four categories such as Children, Student, Adult and Senior Citizen
+
 ```{r}
 age_breaks <- c(0, 10, 18, 60, Inf)
-age_labels <- c("Children", "School", "Adult", "Senior Citizen")
+age_labels <- c("Children", "Student", "Adult", "Senior Citizen")
 
 # Create a new column with age categories
 stroke$Category <- cut(stroke$age, breaks = age_breaks, labels = age_labels)
@@ -80,13 +89,14 @@ print(head(stroke))
 
 ```
 
-**Finding outliers of BMI in the data**
+**Finding outliers of BMI and average glucose level in the data**
 
 ```{r}
 bmi_outliers <- ezids::outlierKD2(stroke,bmi, rm=TRUE, boxplt=FALSE, histogram=FALSE, qqplt=TRUE)
 avg_glucose_outliers <- ezids::outlierKD2(stroke,avg_glucose_level, rm=TRUE, boxplt=FALSE, histogram=FALSE, qqplt=TRUE) 
-
 ```
+
+We have found 43 outliers in BMI and 602 in average glucose level.
 
 **Histogram for distribution for Age**
 
@@ -102,9 +112,38 @@ ggplot(stroke, aes(x = age)) +
        y = "Frequency")
 ```
 
+The distribution is having thick tail on both the sides.
+
+**Histogram for distribution for Average Glucose level**
+
+```{r}
+ggplot(stroke, aes(x = avg_glucose_level)) +
+  geom_histogram(binwidth = 5, fill = "lightgreen", color = "black", alpha = 0.7) +
+  ggtitle("Use theme(plot.title = element_text(hjust = 0.5)) to center") +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  labs(title = "Distribution of Average glucose level",
+       x = "Average glucose level",
+       y = "Frequency")
+```
+
+The graph is right skewed then the mean is greater than median. The distribution is not symmetrical. Most data points are concentrated on left.
+
+**Distribution of BMI**
+
+```{r}
+ggplot(stroke, aes(x = bmi)) +
+  geom_histogram(binwidth = 5, fill = "lightblue", color = "black", alpha = 0.7) +
+  ggtitle("Use theme(plot.title = element_text(hjust = 0.5))") +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  labs(title = "Distribution of BMI",
+       x = "BMI",
+       y = "Frequency")
+```
+
+The graph is almost normally distributed then the mean and median will almost be equal. The graph is also be symmetrical.
+
 **The effect of average glucose level in hypertension**
 
-**From this graph we understand that the females has more average glucose level compared to male**
 ```{r}
 library(ggplot2)
 stroke$gender_label <- factor(ifelse(stroke$gender == 1, "male", "female"), levels = c("male", "female"))
@@ -114,8 +153,7 @@ ggplot(stroke, aes(y = gender_label, x = avg_glucose_level, color = hypertension
   theme(plot.title = element_text(hjust = 0.5)) +
   labs(title = "Scatterplot of Average Glucose Level and Gender",y = "Gender", x = "Avg_glucose_level")
 ```
-
-**From this graph we understand that the average BMI Count of both gender is under 35 approximately**
+From this graph we understand that the females has more average glucose level compared to male
 
 ```{r}
 library(ggplot2)
@@ -130,6 +168,9 @@ ggplot(stroke, aes(x = gender, y = bmi,color = gender_label)) +
   )
 ```
 
+From this graph we understand that the average BMI Count of both gender is under 35 approximately
+
+
 ```{r}
 library(ggplot2)
 ggplot(stroke, aes(x = gender, y = avg_glucose_level,color = gender_label)) +
@@ -142,6 +183,8 @@ ggplot(stroke, aes(x = gender, y = avg_glucose_level,color = gender_label)) +
     y = "Average Glocose Level"
   )
 ```
+
+From this graph we understand that the average glucose level is right skewed.
 
 **What are the age-specific incidence and mortality rates of brain stroke?**
 
@@ -364,8 +407,7 @@ ggplot(married_strpercentage, aes(x=ever_married, y=Percentageofstr_married, fil
   labs(x = "Ever Married or Not", y = "Percentage of Strokes", title = "Percentage of Strokes by Ever-married or Not")
 ```
 
-```{r Chi-Square Test to determine if brain ever-married and age are independent}
-# Chi-squared test of ever_married and age
+```{r}
 contable_marr_age <- table(stroke$ever_married, stroke$Category)
 chitest_marr_age <- chisq.test(contable_marr_age)
 chitest_marr_age
@@ -454,6 +496,14 @@ chi_smoke_status = chisq.test(contingency_table_smoking)
 print(chi_smoke_status)
 ```
 <br/>
+
+Normality Check for Body Mass Index
+```{r}
+qqnorm(healthy_features$bmi, main="Body mass index", col='green') 
+qqline(healthy_features$bmi)
+```
+This depicts body mass index is normally distributed
+
 As p-value for the test is low, we reject null hypothesis. Now we plot bar for smoking_status vs stroke.
 ```{r}
 # add smoking categories
@@ -499,12 +549,14 @@ ggplot(data = healthy_features, aes(x = `bmi`, fill = `bmi_status`)) +
        y = "Count of Brain Strokes") +
   theme(plot.title = element_text(hjust = 0.5))
 ```
-```{r}
-qqnorm(healthy_features$bmi, main="Body mass index", col='green') 
-qqline(healthy_features$bmi)
-```
 <br/>
-This depicts body mass index and stroke are normally distributed.<br/>
+
+Normality check for Average Glucose Level
+```{r}
+qqnorm(healthy_features$avg_glucose_level, main="Average glucose level", col='green') 
+qqline(healthy_features$avg_glucose_level)
+```
+Distribution for average glucose level is not normally distributed.
 
 For avg glucose level and stroke we use 2-sample t-test considering themas numercial variables.<br/>
 $H_0$: agl and stroke are independent<br/>
@@ -532,12 +584,8 @@ ggplot(data = healthy_features, aes(x = `avg_glucose_level`, fill = `agl_status`
        y = "Count of Brain Strokes") +
   theme(plot.title = element_text(hjust = 0.5))
 ```
-```{r}
-qqnorm(healthy_features$avg_glucose_level, main="Average glucose level", col='green') 
-qqline(healthy_features$avg_glucose_level)
-```
 <br/>
-Distribution for average glucose level and stroke rightly skewed
+Average glucose level and stroke are normally distributed
 
 <br/>
 Now combining all features together and test healthy people with stroke. As two are categorical, we use chi square test.<br/>
@@ -600,3 +648,4 @@ ggplot(data = df_married_living, aes(x = `married_living`, fill=married_living))
        y = "Count of Brain Strokes") +
   theme(plot.title = element_text(hjust = 0.5))
 ```
+
