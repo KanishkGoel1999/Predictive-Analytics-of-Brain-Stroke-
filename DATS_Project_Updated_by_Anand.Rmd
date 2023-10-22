@@ -26,15 +26,7 @@ tail(stroke)
 **Summary of the Stroke Data**
 
 ```{r}
-summary_stroke <- xkablesummary(stroke[1, ][c("age","hypertension","heart_disease","stroke")])
-summary_stroke
-```
-
-**Summary of the Average Glucose Level and BMI Data**
-
-```{r}
-summary_astroke <- xkablesummary(stroke[1, ][c("avg_glucose_level","bmi")])
-summary_astroke
+summary(stroke)
 ```
 
 **Checking for missing values in the data**
@@ -92,7 +84,8 @@ print(head(stroke))
 
 ```{r}
 bmi_outliers <- ezids::outlierKD2(stroke,bmi, rm=TRUE, boxplt=FALSE, histogram=FALSE, qqplt=TRUE)
-sum(is.na(bmi_outliers))
+avg_glucose_outliers <- ezids::outlierKD2(stroke,avg_glucose_level, rm=TRUE, boxplt=FALSE, histogram=FALSE, qqplt=TRUE) 
+
 ```
 
 **Histogram for distribution for Age**
@@ -134,6 +127,19 @@ ggplot(stroke, aes(x = gender, y = bmi,color = gender_label)) +
     title = "Box Plot of BMI by Gender",
     x = "Gender",
     y = "BMI"
+  )
+```
+
+```{r}
+library(ggplot2)
+ggplot(stroke, aes(x = gender, y = avg_glucose_level,color = gender_label)) +
+  geom_boxplot() +
+  ggtitle("Use theme(plot.title = element_text(hjust = 0.5)) to center") +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  labs(
+    title = "Box Plot of Average Glocose Level by Gender",
+    x = "Gender",
+    y = "Average Glocose Level"
   )
 ```
 
