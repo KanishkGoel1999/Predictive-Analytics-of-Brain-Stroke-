@@ -10,7 +10,7 @@
 
 
 
-<meta name="date" content="2023-10-22" />
+<meta name="date" content="2023-10-23" />
 
 <title>Predictive Analytics of Brain Stroke Vulnerability via Lifestyle and Health Factors Analysis</title>
 
@@ -1568,7 +1568,7 @@ border-radius: 0px;
 
 <h1 class="title toc-ignore">Predictive Analytics of Brain Stroke
 Vulnerability via Lifestyle and Health Factors Analysis</h1>
-<h4 class="date">2023-10-22</h4>
+<h4 class="date">2023-10-23</h4>
 
 </div>
 
@@ -1717,6 +1717,29 @@ mean, but the distribution is approximately symmetric. A skewness value
 of average glucose level and BMI indicates a right skewed distribution,
 with a longer tail on the right side of the mean. This suggests that
 there are more data points on the left side of the mean.</p>
+<p><strong>Calculating variance and standard deviation</strong></p>
+<pre class="r"><code>sd_age &lt;- sd(stroke$age)
+print(sd_age)</code></pre>
+<pre><code>## [1] 22.66276</code></pre>
+<pre class="r"><code>sd_glucose &lt;- sd(stroke$avg_glucose_level)
+print(sd_glucose)</code></pre>
+<pre><code>## [1] 45.07537</code></pre>
+<pre class="r"><code>sd_BMI &lt;- sd(stroke$bmi)
+print(sd_BMI)</code></pre>
+<pre><code>## [1] 6.790464</code></pre>
+<pre class="r"><code>var_age &lt;- var(stroke$age)
+print(var_age)</code></pre>
+<pre><code>## [1] 513.6005</code></pre>
+<pre class="r"><code>var_glucose &lt;- var(stroke$avg_glucose_level)
+print(var_glucose)</code></pre>
+<pre><code>## [1] 2031.789</code></pre>
+<pre class="r"><code>var_BMI &lt;- var(stroke$bmi)
+print(var_BMI)</code></pre>
+<pre><code>## [1] 46.1104</code></pre>
+<p>The data of average glucose level is wide spread compared to age and
+BMI. A higher variance indicates that the data points are more spread
+out from the mean, glucose is more spread from mean compared to age and
+BMI.</p>
 <p><strong>Histogram for distribution for Age</strong></p>
 <pre class="r"><code>library(ggplot2)</code></pre>
 <pre><code>## 

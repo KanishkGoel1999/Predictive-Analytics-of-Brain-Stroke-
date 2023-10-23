@@ -46,7 +46,7 @@ There are no missing values in the data
 
 ```{r Changing the work_type children to unemployed,include=F}
 stroke$work_type <- ifelse(stroke$work_type == "children", "unemployed", stroke$work_type)
-print(head(stroke))
+head(stroke)
 ```
 
 **Changing the all categorical variable to numeric variables**
@@ -109,8 +109,27 @@ skew_BMI <- skew(stroke$bmi)
 print(skew_BMI)
 ```
 
-
 The skewness of age indicates a slight leftward skew in the data distribution, with more values concentrated on the right side of the mean, but the distribution is approximately symmetric. A skewness value of average glucose level and BMI indicates a right skewed distribution, with a longer tail on the right side of the mean. This suggests that there are more data points on the left side of the mean.
+
+**Calculating variance and standard deviation**
+
+```{r}
+sd_age <- sd(stroke$age)
+print(sd_age)
+sd_glucose <- sd(stroke$avg_glucose_level)
+print(sd_glucose)
+sd_BMI <- sd(stroke$bmi)
+print(sd_BMI)
+
+var_age <- var(stroke$age)
+print(var_age)
+var_glucose <- var(stroke$avg_glucose_level)
+print(var_glucose)
+var_BMI <- var(stroke$bmi)
+print(var_BMI)
+```
+
+The data of average glucose level is wide spread compared to age and BMI. A higher variance indicates that the data points are more spread out from the mean, glucose is more spread from mean compared to age and BMI.
 
 **Histogram for distribution for Age**
 
