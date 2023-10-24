@@ -39,26 +39,26 @@ The choice of features in the dataset is another limitation. It's essential to e
 Data bias remains a concern, particularly if the dataset is drawn from specific regions or populations. Such bias can restrict the generalizability of findings and models to broader populations or healthcare contexts. The data collection methods used can introduce bias or limitations, especially if the data primarily originates from a specific type of healthcare facility. This can affect the dataset's representativeness and relevance to different healthcare settings. The dataset might not account for all potential confounding factors, such as family history, genetic predisposition, or specific lifestyle variables, which can significantly impact the likelihood of strokes.
 
 # Analysis
+Summary of Data
 ```{r}
 # Importing and Summary of the Stroke Data
 summary(stroke)
 ```
 
-```{r Checking for missing values in the data}
+```{r Checking for missing values in the data, echo=FALSE, include=FALSE}
 # Checking for missing values in the data
 missing_values <- is.na(stroke)
 summary(missing_values)
 ```
 
+There are No Missing values in any of the columns.
 ```{r Changing the work_type children to unemployed, include = FALSE, echo = FALSE}
 # Changing the work_type children to unemployed
 stroke$work_type <- ifelse(stroke$work_type == "children", "unemployed", stroke$work_type)
 head(stroke)
 ```
-<br/>
-**After changing all categorical variable to numeric variables**
 
-```{r}
+```{r,echo=FALSE,include=FALSE}
 #Changing gender to numerical
 stroke$gender <- as.numeric(factor(stroke$gender))
 
@@ -77,10 +77,9 @@ stroke$smoking_status <- as.numeric(factor(stroke$smoking_status))
 final <- stroke
 head(final)
 ```
-<br/>
 We started by importing the dataset and checking for missing values, which, fortunately, were not found in the data. We then made some data preprocessing steps, including changing the "work_type" category "children" to "unemployed" and converting categorical variables into numerical form. We categorized age into four groups: Children, Students, Adults, and Senior Citizens. This allowed us to analyze the impact of age groups on brain stroke vulnerability.
 
-I have grouped age into four categories such as Children, Student, Adult and Senior Citizen
+We have grouped age into four categories such as Children, Student, Adult and Senior Citizen and Encoded categorical variables.
 
 ```{r}
 # Introducing the Age Categories
@@ -104,8 +103,6 @@ avg_glucose_outliers <- ezids::outlierKD2(stroke,avg_glucose_level, rm=TRUE, box
 ```
 <br/>
 We identified outliers in BMI and average glucose levels using the KD2 method. There were 43 outliers in BMI and 602 outliers in average glucose levels, suggesting potential data anomalies.
-<br/>
-
 ```{r, include = FALSE, echo = FALSE}
 # Checking Skewness of Age, BMI and Average Glucose Level*
 library(psych)
@@ -118,8 +115,6 @@ print(skew_BMI)
 ```
 <br/>
 The skewness of age indicates a slight leftward skew in the data distribution, with more values concentrated on the right side of the mean, but the distribution is approximately symmetric. A skewness value of average glucose level and BMI indicates a right skewed distribution, with a longer tail on the right side of the mean. This suggests that there are more data points on the left side of the mean.
-
-
 
 ```{r, include = FALSE, echo = FALSE}
 # **Calculating variance and standard deviation
@@ -137,7 +132,6 @@ print(var_glucose)
 var_BMI <- var(stroke$bmi)
 print(var_BMI)
 ```
-<br/>
 
 ```{r, include = FALSE, echo = FALSE}
 # Calculating kurtosis for age, average glucose level and BMI
@@ -154,8 +148,6 @@ print(kurtosis_BMI)
 <br/>
 We calculated various statistical measures like mean, median, standard deviation, variance, skewness, kurtosis, and mode for the variables age, average glucose level, and BMI. These statistics provide insights into the distributions and characteristics of the data. The standard deviation value suggests that the data for average glucose levels has a wider spread than that of age and BMI. A higher variance implies that the data points deviate more from their respective means, with glucose displaying a greater spread from the mean in contrast to age and BMI. The kurtosis values for age, average glucose level, and BMI show us the shapes of their distributions. A kurtosis value of 2.004955 for age means that the distribution is close to normal, with balanced tails and a moderate peak. A kurtosis value of 4.74971 for average glucose level suggests a leptokurtic distribution, which means that it has a pronounced central peak and heavier tails, which could mean that there are outliers in the data. A kurtosis value of 2.860614 for BMI points to a mesokurtic distribution, which means that it is similar to a normal curve with moderate tail behavior.
 <br/>
-
-
 ```{r, include = FALSE, echo = FALSE}
 # **Calculation of Mode for age, average glucose level and BMI
 library(DescTools)
@@ -168,7 +160,6 @@ print(mode_glucose)
 mode_BMI <- Mode(stroke$bmi)
 print(mode_BMI)
 ```
-<br/>
 Age: The modes of 78 and 102 suggest that there are two distinct age groups or that these specific ages are common in the dataset.
 Average glucose level: The mode of 93.88 is a decimal value, which suggests that the data was collected precisely or that there are specific measurement practices in place. There is also another mode at 6, which suggests that there is another significant cluster of data points at this level.
 BMI: The modes of 28.7 and 42 may correspond to common BMI values, which suggests that there are two categories or clusters of individuals with similar BMI values.
@@ -176,9 +167,12 @@ BMI: The modes of 28.7 and 42 may correspond to common BMI values, which suggest
 
 <br/>
 We created histograms to visualize the distributions of age, average glucose level, and BMI. These visualizations helped us understand the shape and characteristics of the data.
+```{r, include=FALSE,echo=FALSE}
+library(ggplot2)
+```
+
 ```{r}
 # **Histogram for distribution for Age**
-library(ggplot2)
 ggplot(stroke, aes(x = age)) +
   geom_histogram(binwidth = 5, fill = "blue", color = "black", alpha = 0.7) +
   ggtitle("Use theme(plot.title = element_text(hjust = 0.5)) to center") +
@@ -187,11 +181,9 @@ ggplot(stroke, aes(x = age)) +
        x = "Age",
        y = "Frequency")
 ```
-
+<br/>
 The distribution is having thick tail on both the sides.
-<br/>
-**Histogram for distribution for Average Glucose level**
-<br/>
+
 ```{r}
 ggplot(stroke, aes(x = avg_glucose_level)) +
   geom_histogram(binwidth = 5, fill = "lightgreen", color = "black", alpha = 0.7) +
@@ -204,8 +196,6 @@ ggplot(stroke, aes(x = avg_glucose_level)) +
 <br/>
 The graph is right skewed then the mean is greater than median. The distribution is not symmetrical. Most data points are concentrated on left.
 <br/>
-**Distribution of BMI**
-<br/>
 ```{r}
 ggplot(stroke, aes(x = bmi)) +
   geom_histogram(binwidth = 5, fill = "lightblue", color = "black", alpha = 0.7) +
@@ -215,11 +205,9 @@ ggplot(stroke, aes(x = bmi)) +
        x = "BMI",
        y = "Frequency")
 ```
+<br/>The graph is almost normally distributed then the mean and median will almost be equal. The graph is also be symmetrical.
 <br/>
-The graph is almost normally distributed then the mean and median will almost be equal. The graph is also be symmetrical.
-<br/>
-**The effect of average glucose level in hypertension**
-<br/>
+               **Effect of average glucose level in hypertension**
 ```{r}
 library(ggplot2)
 stroke$gender_label <- factor(ifelse(stroke$gender == 1, "male", "female"), levels = c("male", "female"))
@@ -229,7 +217,7 @@ ggplot(stroke, aes(y = gender_label, x = avg_glucose_level, color = hypertension
   theme(plot.title = element_text(hjust = 0.5)) +
   labs(title = "Scatterplot of Average Glucose Level and Gender",y = "Gender", x = "Avg_glucose_level")
 ```
-From this graph we understand that the females has more average glucose level compared to male
+<br/>From this graph we understand that the females has more average glucose level compared to male
 <br/>
 ```{r}
 library(ggplot2)
@@ -300,8 +288,11 @@ ggplot(data = brain_stroke_yes, aes(x = `Category`, fill = `Category`)) +
   theme(plot.title = element_text(hjust = 0.5))
 ```
 
-```{r Percentage wise barplot for Age Category, include=TRUE}
+```{r ,include=FALSE,echo=FALSE}
 library(dplyr)
+```
+
+```{r Percentage wise barplot for Age Category, include=TRUE}
 
 # Calculate the total number of cases
 total_cases <- nrow(brain_stroke_yes)
@@ -425,7 +416,6 @@ Contingency_Table_Location <- table(stroke$Residence_type , stroke$stroke)
 Chi_Square_Test_Location_BS <- chisq.test(Contingency_Table_Location)
 print(Chi_Square_Test_Location_BS$p.value)
 ```
-<br/>
 p-value (`r Chi_Square_Test_Location_BS$p.value`) is greater than 0.05 (Standard Significance level) and therefore we accept Null Hypothesis and so 
 we can conclude that brain stroke doesn't depend on Location of residence.
 
@@ -568,7 +558,7 @@ $H_1:$ smoking and stroke are not independent
 ```{r}
 # contingency table for smoking_status and stroke
 contingency_table_smoking <- table(healthy_features$smoking_status, healthy_features$stroke)
-print(contingency_table_smoking)
+#print(contingency_table_smoking)
 chi_smoke_status = chisq.test(contingency_table_smoking)
 print(chi_smoke_status)
 ```
@@ -634,7 +624,7 @@ Normality check for Average Glucose Level
 qqnorm(healthy_features$avg_glucose_level, main="Average glucose level", col='green') 
 qqline(healthy_features$avg_glucose_level)
 ```
-Distribution for average glucose level is not normally distributed.
+<br/>Distribution for average glucose level is not normally distributed.
 
 For avg glucose level and stroke we use 2-sample t-test considering themas numercial variables.<br/>
 $H_0$: agl and stroke are independent<br/>
@@ -665,7 +655,6 @@ ggplot(data = healthy_features, aes(x = `avg_glucose_level`, fill = `agl_status`
 <br/>
 Average glucose level and stroke are normally distributed
 
-<br/>
 Now combining all features together and test healthy people with stroke. As two are categorical, we use chi square test.<br/>
 $H_0$: Health and stroke are independent<br/>
 $H_1$: Health and stroke are not independent
@@ -738,10 +727,3 @@ Based on the analysis, we recommend the following:
 * Provide targeted awareness campaigns about the risks of stroke among specific age groups.
 * Consider tailored interventions for married males to reduce their stroke risk.
 * By addressing these recommendations, we can potentially reduce the incidence of strokes and improve public health.
-
-# Limitations
-It's important to acknowledge the limitations of this analysis, including potential outliers in the data and the simplifications made in hypothesis testing. Further research and more comprehensive data could refine the findings and recommendations.
-
-
-
-
