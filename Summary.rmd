@@ -25,7 +25,7 @@ print(head(stroke))
 In this report, we present an analysis of brain stroke vulnerability by examining lifestyle and health factors. We have used a dataset that includes various features such as age, average glucose level, BMI, gender, work type, residence type, ever-married status, smoking status, and the presence of hypertension and heart disease. 
 
 # Dataset 
-<br/>
+
 **Initial summary**<br/>
 The dataset comprises approximately ten distinct features, including gender, age, hypertension, heart disease, marital status, work type, residence type, average glucose level, BMI, and smoking status. The primary target variable under investigation is the presence of a stroke. The dataset encompasses roughly 5000 observations. The target variable, along with two other features, heart disease and hypertension, is binary, with values of either 0 (absent) or 1 (present) to indicate the presence or absence of these conditions.
 
