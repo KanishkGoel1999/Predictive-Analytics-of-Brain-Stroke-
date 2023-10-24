@@ -21,6 +21,32 @@ stroke = read.csv("full_data.csv")
 print(head(stroke))
 ```
 
+**Summary Paper**
+
+Exposition and Curation
+
+a) What do we know about this dataset?  
+
+The dataset comprises approximately ten distinct features, including gender, age, hypertension, heart disease, marital status, work type, residence type, average glucose level, BMI, and smoking status. The primary target variable under investigation is the presence of a stroke. The dataset encompasses roughly 5000 observations. The target variable, along with two other features, heart disease and hypertension, is binary, with values of either 0 (absent) or 1 (present) to indicate the presence or absence of these conditions.
+
+Furthermore, there are five categorical variables within the dataset: age, gender, marital status, work type, and residence type. The "gender" variable comprises values of "Male," "Female," and "Other." The "marital status" variable consists of "Yes" and "No" values. The "work type" variable encompasses categories such as "Children," "Government Job," "Private Job," "Self Employed," and "Never Worked." The "residence type" variable has values of "Rural" and "Urban." Lastly, the "smoking status" variable includes options like "Formerly Smoked," "Never Smoked," "Smokes," and "Unknown." Apart from this there is no missing value in the data set.
+
+b) What are the limitations of the dataset? 
+
+Firstly, the sample size of approximately 5000 observations is relatively modest, potentially limiting the dataset's ability to capture the full complexity of factors influencing stroke occurrence. Larger datasets are generally preferred for healthcare-related studies, particularly when studying rare events like strokes.
+
+Additionally, the dataset's imbalanced target variable, which contains very few instances of strokes compared to non-stroke cases, poses a significant challenge. Class imbalance can hinder the development of accurate predictive models, and addressing this issue is crucial for meaningful results. While the absence of missing values is a positive aspect, it doesn't entirely alleviate the concerns related to data quality. The dataset might still contain inaccuracies or inconsistencies that could impact the reliability of any analyses or models.
+
+The choice of features in the dataset is another limitation. It's essential to ensure that all relevant factors influencing stroke occurrence are adequately represented. Furthermore, the categorical variables, like "smoking status" and "work type," might lack more detailed subcategories, potentially missing important nuances in these variables.
+
+Data bias remains a concern, particularly if the dataset is drawn from specific regions or populations. Such bias can restrict the generalizability of findings and models to broader populations or healthcare contexts. The data collection methods used can introduce bias or limitations, especially if the data primarily originates from a specific type of healthcare facility. This can affect the dataset's representativeness and relevance to different healthcare settings.
+
+The dataset might not account for all potential confounding factors, such as family history, genetic predisposition, or specific lifestyle variables, which can significantly impact the likelihood of strokes.
+
+c) How was the information gathered?
+
+We got the stroke dataset from a website called Kaggle, but the website does not say how the data was collected. We tried to contact the person who put the data on Kaggle to learn more, but they did not respond to our messages.
+
 **Importing and Summary of the Stroke Data**
 
 ```{r}
