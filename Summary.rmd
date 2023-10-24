@@ -50,7 +50,7 @@ missing_values <- is.na(stroke)
 summary(missing_values)
 ```
 
-```{r Changing the work_type children to unemployed}
+```{r Changing the work_type children to unemployed, include = FALSE, echo = FALSE}
 # Changing the work_type children to unemployed
 stroke$work_type <- ifelse(stroke$work_type == "children", "unemployed", stroke$work_type)
 head(stroke)
@@ -80,12 +80,10 @@ head(final)
 <br/>
 We started by importing the dataset and checking for missing values, which, fortunately, were not found in the data. We then made some data preprocessing steps, including changing the "work_type" category "children" to "unemployed" and converting categorical variables into numerical form. We categorized age into four groups: Children, Students, Adults, and Senior Citizens. This allowed us to analyze the impact of age groups on brain stroke vulnerability.
 
-
-**Introducing the Age Categories**
-
 I have grouped age into four categories such as Children, Student, Adult and Senior Citizen
 
 ```{r}
+# Introducing the Age Categories
 age_breaks <- c(0, 10, 18, 60, Inf)
 age_labels <- c("Children", "Student", "Adult", "Senior Citizen")
 
@@ -97,18 +95,19 @@ print(head(stroke))
 
 ```
 <br/>
-**Finding outliers of BMI and average glucose level in the data**
+
 
 ```{r}
+# Finding outliers of BMI and average glucose level in the data
 bmi_outliers <- ezids::outlierKD2(stroke,bmi, rm=TRUE, boxplt=FALSE, histogram=FALSE, qqplt=TRUE)
-avg_glucose_outliers <- ezids::outlierKD2(stroke,avg_glucose_level, rm=TRUE, boxplt=FALSE, histogram=FALSE, qqplt=TRUE) 
+avg_glucose_outliers <- ezids::outlierKD2(stroke,avg_glucose_level, rm=TRUE, boxplt=TRUE, histogram=TRUE, qqplt=TRUE) 
 ```
 <br/>
 We identified outliers in BMI and average glucose levels using the KD2 method. There were 43 outliers in BMI and 602 outliers in average glucose levels, suggesting potential data anomalies.
 <br/>
-**Checking Skewness of Age, BMI and Average Glucose Level**
 
-```{r}
+```{r, include = FALSE, echo = FALSE}
+# Checking Skewness of Age, BMI and Average Glucose Level*
 library(psych)
 skew_age <- skew(stroke$age)
 print(skew_age)
@@ -120,9 +119,10 @@ print(skew_BMI)
 <br/>
 The skewness of age indicates a slight leftward skew in the data distribution, with more values concentrated on the right side of the mean, but the distribution is approximately symmetric. A skewness value of average glucose level and BMI indicates a right skewed distribution, with a longer tail on the right side of the mean. This suggests that there are more data points on the left side of the mean.
 
-**Calculating variance and standard deviation**
 
-```{r}
+
+```{r, include = FALSE, echo = FALSE}
+# **Calculating variance and standard deviation
 sd_age <- sd(stroke$age)
 print(sd_age)
 sd_glucose <- sd(stroke$avg_glucose_level)
@@ -138,9 +138,9 @@ var_BMI <- var(stroke$bmi)
 print(var_BMI)
 ```
 <br/>
-**Calculating kurtosis for age, average glucose level and BMI**
 
-```{r}
+```{r, include = FALSE, echo = FALSE}
+# Calculating kurtosis for age, average glucose level and BMI
 library(moments)
 kurtosis_age <- kurtosis(stroke$age)
 print(kurtosis_age)
@@ -154,9 +154,10 @@ print(kurtosis_BMI)
 <br/>
 We calculated various statistical measures like mean, median, standard deviation, variance, skewness, kurtosis, and mode for the variables age, average glucose level, and BMI. These statistics provide insights into the distributions and characteristics of the data. The standard deviation value suggests that the data for average glucose levels has a wider spread than that of age and BMI. A higher variance implies that the data points deviate more from their respective means, with glucose displaying a greater spread from the mean in contrast to age and BMI. The kurtosis values for age, average glucose level, and BMI show us the shapes of their distributions. A kurtosis value of 2.004955 for age means that the distribution is close to normal, with balanced tails and a moderate peak. A kurtosis value of 4.74971 for average glucose level suggests a leptokurtic distribution, which means that it has a pronounced central peak and heavier tails, which could mean that there are outliers in the data. A kurtosis value of 2.860614 for BMI points to a mesokurtic distribution, which means that it is similar to a normal curve with moderate tail behavior.
 <br/>
-**Calculation of Mode for age, average glucose level and BMI**
 
-```{r}
+
+```{r, include = FALSE, echo = FALSE}
+# **Calculation of Mode for age, average glucose level and BMI
 library(DescTools)
 mode_age <- Mode(stroke$age)
 print(mode_age)
@@ -172,10 +173,11 @@ Age: The modes of 78 and 102 suggest that there are two distinct age groups or t
 Average glucose level: The mode of 93.88 is a decimal value, which suggests that the data was collected precisely or that there are specific measurement practices in place. There is also another mode at 6, which suggests that there is another significant cluster of data points at this level.
 BMI: The modes of 28.7 and 42 may correspond to common BMI values, which suggests that there are two categories or clusters of individuals with similar BMI values.
 <br/>
-**Histogram for distribution for Age**
+
 <br/>
 We created histograms to visualize the distributions of age, average glucose level, and BMI. These visualizations helped us understand the shape and characteristics of the data.
 ```{r}
+# **Histogram for distribution for Age**
 library(ggplot2)
 ggplot(stroke, aes(x = age)) +
   geom_histogram(binwidth = 5, fill = "blue", color = "black", alpha = 0.7) +
@@ -267,24 +269,24 @@ Null Hypothesis(H0): Age and stroke variables are independent.
 
 Alternative Hypothesis(Ha): Age and stroke are not independent.
 
-```{r Chi-Square Test to determine if brain stroke and age group are independent, include=TRUE}
+```{r Chi-Square Test to determine if brain stroke and age group are independent, include = FALSE, echo = FALSE}
 Contingency_Table_Age <- table(stroke$Category , stroke$stroke)
 Chi_Square_Test_Age_BS <- chisq.test(Contingency_Table_Age)
 print(Chi_Square_Test_Age_BS$p.value)
 ```
 <br/>
-The p-value for this test is <0.05 (Standard Significane level), therefore we reject Null Hypothesis. 
+The p-value for this test is `r Chi_Square_Test_Age_BS$p.value` <0.05 (Standard Significane level), therefore we reject Null Hypothesis. 
 Hence we can conclude that Age and stroke are not independent.
 Age group significantly matters in chances of having a brain stroke.
 
 **Which category in age has highest number of Brain Strokes**
 
-```{r Highest brain strokes in which category, include=TRUE}
+```{r Highest brain strokes in which category, include=TRUE, include = FALSE, echo = FALSE}
 print(Contingency_Table_Age)
 
 ```
 
-```{r}
+```{r, include = FALSE, echo = FALSE}
 brain_stroke_yes <- subset(stroke,stroke == 1)
 brain_stroke_no <- subset(stroke,stroke == 0)
 ```
@@ -328,13 +330,13 @@ Null Hypothesis(H0): Worktype and stroke variables are independent.
 
 Alternative Hypothesis(Ha): Worktype and stroke are not independent.
 
-```{r Chi-Square Test to determine if brain stroke and wortype are independent, include=TRUE}
+```{r Chi-Square Test to determine if brain stroke and wortype are independent, include = FALSE, echo = FALSE}
 Contingency_Table_worktype <- table(stroke$work_type , stroke$stroke)
 Chi_Square_Test_worktype_BS <- chisq.test(Contingency_Table_worktype)
 print(Chi_Square_Test_worktype_BS$p.value)
 ```
 <br/>
-The p-value for this test is <0.05 (Standard Significane level), therefore we reject Null Hypothesis. 
+The p-value for this test is `r Chi_Square_Test_worktype_BS$p.value`<0.05 (Standard Significane level), therefore we reject Null Hypothesis. 
 Hence we can conclude that worktype and stroke are not independent.
 Worktype significantly matters in chances of having a brain stroke.
 
@@ -385,7 +387,7 @@ Null Hypothesis(H0): Gender and stroke variables are independent.
 
 Alternative Hypothesis(Ha): Gender and stroke are not independent.
 
-```{r Chi-Square Test to determine if brain stroke and Worktype are independent, include=TRUE}
+```{r Chi-Square Test to determine if brain stroke and Worktype are independent, include = FALSE, echo = FALSE}
 Contingency_Table_Gender <- table(stroke$gender , stroke$stroke)
 Chi_Square_Test_Gender_BS <- chisq.test(Contingency_Table_Gender)
 print(Chi_Square_Test_Gender_BS$p.value)
@@ -418,13 +420,13 @@ Null Hypothesis(H0): Location and stroke variables are independent.
 
 Alternative Hypothesis(Ha): Location and stroke are not independent.
 
-```{r Chi-Square Test to determine if brain stroke and Location are independent, include=TRUE}
+```{r Chi-Square Test to determine if brain stroke and Location are independent, include = FALSE, echo = FALSE}
 Contingency_Table_Location <- table(stroke$Residence_type , stroke$stroke)
 Chi_Square_Test_Location_BS <- chisq.test(Contingency_Table_Location)
 print(Chi_Square_Test_Location_BS$p.value)
 ```
 <br/>
-p-value is greater than 0.05 (Standard Significance level) and therefore we accept Null Hypothesis and so 
+p-value (`r Chi_Square_Test_Location_BS$p.value`) is greater than 0.05 (Standard Significance level) and therefore we accept Null Hypothesis and so 
 we can conclude that brain stroke doesn't depend on Location of residence.
 
 ```{r Percentage wise stroke for Location, include=TRUE}
@@ -452,7 +454,7 @@ ggplot(data = brain_stroke_yes_percentage, aes(x = Residence_type, y = Percentag
 <br/>
 **Does brain stroke depend on ever-married?**
 
-```{r Chi-Square Test to determine if brain stroke and ever-married are independent, include=TRUE}
+```{r Chi-Square Test to determine if brain stroke and ever-married are independent, include = FALSE, echo = FALSE}
 # Chi-squared test of ever_married and stroke
 contable_marr_str <- table(stroke$ever_married, stroke$stroke)
 chitest_marr_str <- chisq.test(contable_marr_str)
@@ -482,7 +484,7 @@ ggplot(married_strpercentage, aes(x=ever_married, y=Percentageofstr_married, fil
   labs(x = "Ever Married or Not", y = "Percentage of Strokes", title = "Percentage of Strokes by Ever-married or Not")
 ```
 
-```{r}
+```{r, include = FALSE, echo = FALSE}
 contable_marr_age <- table(stroke$ever_married, stroke$Category)
 chitest_marr_age <- chisq.test(contable_marr_age)
 chitest_marr_age
@@ -536,7 +538,7 @@ ggplot(heart_strpercentage, aes(x=heart, y=Percentageofstr_heart, fill=heart)) +
   labs(x = "With/without Heart Disease", y = "Percentage of Strokes", title = "Percentage of Strokes by Heart Disease")
 ```
 
-```{r Chi-squared Test to determine the independence between hypertension, heart disease and brain stroke}
+```{r Chi-squared Test to determine the independence between hypertension, heart disease and brain stroke, include = FALSE, echo = FALSE}
 library("corrplot")
 hyp_heart_str_cor <- cor(data.frame(stroke$hypertension, stroke$heart_disease, stroke$stroke))
 corrplot(hyp_heart_str_cor)
@@ -554,7 +556,7 @@ chitest_hyp_heart
 <br/>
 **What are modifiable and non-modifiable risk factors for stroke in healthy people?**<br/>
 We analyzed modifiable and non-modifiable risk factors for stroke in healthy individuals by considering average glucose level, BMI, and smoking status. We conducted hypothesis tests and visualizations to understand their relationships with stroke risk. We can take features like avg_glucose_level, bmi and smoking_status.
-```{r}
+```{r, include = FALSE, echo = FALSE}
 #get responsible features from main dataset
 healthy_features <- stroke[,8:11]
 healthy_features$smoking_status <- replace(healthy_features$smoking_status, healthy_features$smoking_status==4, 3)
@@ -603,13 +605,13 @@ For BMI and stroke, we do a 2-sample test considering them as numerical features
 $H_0$: bmi and stroke are independent<br/>
 $H_1$: bmi and stroke are not independent
 
-```{r}
+```{r, include = FALSE, echo = FALSE}
 # two sample t-test
 two_sample_bmi <- t.test(healthy_features$bmi, healthy_features$stroke)
 two_sample_bmi
 ```
 <br/>
-As p-value for the test is low, we reject null hypothesis. Now we plot bar for BMI vs stroke.
+As p-value (`r two_sample_bmi$p.value`) for the test is low, we reject null hypothesis. Now we plot bar for BMI vs stroke.
 ```{r}
 # add bmi_status column
 healthy_features <- healthy_features %>%
@@ -637,7 +639,7 @@ Distribution for average glucose level is not normally distributed.
 For avg glucose level and stroke we use 2-sample t-test considering themas numercial variables.<br/>
 $H_0$: agl and stroke are independent<br/>
 $H_1$: agl and stroke are not independent
-```{r}
+```{r, include = FALSE, echo = FALSE}
 # 2 sample t-test
 two_sample_agl <- t.test(healthy_features$avg_glucose_level, healthy_features$stroke)
 print(two_sample_agl)
@@ -667,7 +669,7 @@ Average glucose level and stroke are normally distributed
 Now combining all features together and test healthy people with stroke. As two are categorical, we use chi square test.<br/>
 $H_0$: Health and stroke are independent<br/>
 $H_1$: Health and stroke are not independent
-```{r}
+```{r, include = FALSE, echo = FALSE}
 # Create a column for health_status
 healthy_features<- transform(healthy_features, health_status=ifelse(avg_glucose_level<100 & avg_glucose_level>70 & bmi<25 & bmi>18.5, 1,0))
 
@@ -676,7 +678,7 @@ chigoodness = chisq.test(healthy_table)
 print(chigoodness$p.value)
 ```
 <br/>
-Due to low p-value, we reject null hypothesis. <br/>
+Due to low p-value of `r chigoodness$p.value`, we reject null hypothesis. <br/>
 
 Barplot between health feature and stroke
 ```{r}
@@ -695,7 +697,7 @@ ggplot(data = healthy_features, aes(x = `health_status`, fill='health_status')) 
 We combine two columns to form another column. As two are categorical, we use chi square test.<br/>
 $H_0:$ The variables are independent<br/>
 $H_1:$ The variables are not independent
-```{r}
+```{r, include = FALSE, echo = FALSE}
 # Create a dataframe with factors responsible for married_living 
 df_married_living <- stroke[c('gender', 'ever_married', 'stroke')]
 
@@ -714,7 +716,7 @@ print(chi_test)
 table(df_married_living$gender,df_married_living$ever_married)
 ```
 <br/>
-Due to low p-value, we reject $H_0$.<br/>
+Due to low p-value of `r chi_test$p.value`, we reject $H_0$.<br/>
 ```{r}
 # Create plot between married_living and stroke
 ggplot(data = df_married_living, aes(x = `married_living`, fill=married_living)) +
@@ -731,11 +733,11 @@ This analysis provides valuable insights into factors that influence brain strok
 # Recommendations
 Based on the analysis, we recommend the following:
 
-*Encourage regular health check-ups, especially for individuals with higher average glucose levels.
-*Promote a healthy lifestyle, including maintaining a healthy BMI.
-*Provide targeted awareness campaigns about the risks of stroke among specific age groups.
-*Consider tailored interventions for married males to reduce their stroke risk.
-*By addressing these recommendations, we can potentially reduce the incidence of strokes and improve public health.
+* Encourage regular health check-ups, especially for individuals with higher average glucose levels.
+* Promote a healthy lifestyle, including maintaining a healthy BMI.
+* Provide targeted awareness campaigns about the risks of stroke among specific age groups.
+* Consider tailored interventions for married males to reduce their stroke risk.
+* By addressing these recommendations, we can potentially reduce the incidence of strokes and improve public health.
 
 # Limitations
 It's important to acknowledge the limitations of this analysis, including potential outliers in the data and the simplifications made in hypothesis testing. Further research and more comprehensive data could refine the findings and recommendations.
