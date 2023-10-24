@@ -31,6 +31,9 @@ The dataset comprises approximately ten distinct features, including gender, age
 
 Furthermore, there are five categorical variables within the dataset: age, gender, marital status, work type, and residence type. The "gender" variable comprises values of "Male," "Female," and "Other." The "marital status" variable consists of "Yes" and "No" values. The "work type" variable encompasses categories such as "Children," "Government Job," "Private Job," "Self Employed," and "Never Worked." The "residence type" variable has values of "Rural" and "Urban." Lastly, the "smoking status" variable includes options like "Formerly Smoked," "Never Smoked," "Smokes," and "Unknown." Apart from this there is no missing value in the data set.
 <br/>
+**Previous study**<br/>
+In the past five years, a considerable body of peer-reviewed research from the GWU library database has focused on stroke prediction, primarily led by biostatistical scientists. Many of these researchers, particularly from China, have developed predictive models for assessing stroke risk. Their work has illuminated a range of predictive factors, including age, gender, exercise habits, dietary preferences (comprising both meat and vegetarian diets), BMI, cholesterol levels, hypertension, diabetes, heart disease, smoking status, waist circumference, systolic blood pressure, the Chinese visceral adiposity index, waist-height ratio, as well as lifestyle factors like exercise intensity, physical activity, alcohol consumption, and a past history involving conditions such as hypertension and coronary heart disease. Additionally, family history factors relating to stroke and coronary heart disease have been considered (Jae-woo Lee et al., 2018; Yao, Qiang et al., 2020; Qi Wang et al., 2022). These research efforts collectively yielded predictive models of remarkable accuracy, achieving AUC values in the range of 0.7-0.83. Importantly, our research incorporates variables that are consistent with those explored in prior studies, underscoring the meaningfulness of our exploration.
+<br/>
 **Limitations**<br/>
 Firstly, the sample size of approximately 5000 observations is relatively modest, potentially limiting the dataset's ability to capture the full complexity of factors influencing stroke occurrence. Larger datasets are generally preferred for healthcare-related studies, particularly when studying rare events like strokes. Additionally, the dataset's imbalanced target variable, which contains very few instances of strokes compared to non-stroke cases, poses a significant challenge. Class imbalance can hinder the development of accurate predictive models, and addressing this issue is crucial for meaningful results. While the absence of missing values is a positive aspect, it doesn't entirely alleviate the concerns related to data quality. The dataset might still contain inaccuracies or inconsistencies that could impact the reliability of any analyses or models.
 
@@ -443,6 +446,7 @@ ggplot(data = brain_stroke_yes_percentage, aes(x = Residence_type, y = Percentag
 ```
 <br/>
 **Does brain stroke depend on ever-married?**
+<br/>We conducted Chi-squared test between ever-married and stroke to test the independence. The small p-value showed that stroke risk is influenced by marriage experience.
 
 ```{r Chi-Square Test to determine if brain stroke and ever-married are independent, include = FALSE, echo = FALSE}
 # Chi-squared test of ever_married and stroke
@@ -473,6 +477,8 @@ ggplot(married_strpercentage, aes(x=ever_married, y=Percentageofstr_married, fil
   geom_bar(stat = "identity", col = "black", width = 0.7) + 
   labs(x = "Ever Married or Not", y = "Percentage of Strokes", title = "Percentage of Strokes by Ever-married or Not")
 ```
+<br/>From this plot we can see intuitively the big difference between the stroke risk of people who are ever-married and people never married. People who are ever married have a higher likelyhood to have stroke.
+<br/>However, as shown in previous exploration, senior people are more likely to get stroke. Therefore, it's unsafe to draw the conclusion that people who are ever-married are more likely to have stroke because according to common sense, senior people are likely to have been married before. So we conducted a Chi-squared test to determine the independence between ever-married and age group. Without doubt the small p-value showed dependence between marriage experience and age.
 
 ```{r, include = FALSE, echo = FALSE}
 contable_marr_age <- table(stroke$ever_married, stroke$Category)
@@ -481,7 +487,7 @@ chitest_marr_age
 ```
 <br/>
 **How do hypertension and heart disease influence brain stroke?**
-We examined the influence of hypertension and heart disease on brain stroke using chi-squared tests. The results showed that both hypertension and heart disease were associated with a higher likelihood of experiencing a brain stroke.
+<br/>We examined the influence of hypertension and heart disease on brain stroke using chi-squared tests. The results showed that both hypertension and heart disease were associated with a higher likelihood of experiencing a brain stroke.
 ```{r Percentage wise stroke for hypertension and heart disease}
 # changing the labels of "hypertension"
 # brain_stroke_yes$hypertension <- factor(brain_stroke_yes$hypertension, levels = c("0", "1"), labels = c("no hypertension", "have hypertension"))
