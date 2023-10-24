@@ -1,5 +1,5 @@
 ---
-title: "Predictive Analytics of Brain Stroke Vulnerability via Lifestyle and Health Factors Analysis"
+title: "Summary Report: Predictive Analytics of Brain Stroke Vulnerability"
 date: "`r Sys.Date()`"
 output:
   html_document:
@@ -21,31 +21,22 @@ stroke = read.csv("full_data.csv")
 print(head(stroke))
 ```
 
-**Summary Paper**
+**Introduction**
+In this report, we present an analysis of brain stroke vulnerability by examining lifestyle and health factors. We have used a dataset that includes various features such as age, average glucose level, BMI, gender, work type, residence type, ever-married status, smoking status, and the presence of hypertension and heart disease. 
 
-Exposition and Curation
-
-a) What do we know about this dataset?  
-
+#Dataset 
+<br/>
+##Initial summary
 The dataset comprises approximately ten distinct features, including gender, age, hypertension, heart disease, marital status, work type, residence type, average glucose level, BMI, and smoking status. The primary target variable under investigation is the presence of a stroke. The dataset encompasses roughly 5000 observations. The target variable, along with two other features, heart disease and hypertension, is binary, with values of either 0 (absent) or 1 (present) to indicate the presence or absence of these conditions.
 
 Furthermore, there are five categorical variables within the dataset: age, gender, marital status, work type, and residence type. The "gender" variable comprises values of "Male," "Female," and "Other." The "marital status" variable consists of "Yes" and "No" values. The "work type" variable encompasses categories such as "Children," "Government Job," "Private Job," "Self Employed," and "Never Worked." The "residence type" variable has values of "Rural" and "Urban." Lastly, the "smoking status" variable includes options like "Formerly Smoked," "Never Smoked," "Smokes," and "Unknown." Apart from this there is no missing value in the data set.
-
-b) What are the limitations of the dataset? 
-
-Firstly, the sample size of approximately 5000 observations is relatively modest, potentially limiting the dataset's ability to capture the full complexity of factors influencing stroke occurrence. Larger datasets are generally preferred for healthcare-related studies, particularly when studying rare events like strokes.
-
-Additionally, the dataset's imbalanced target variable, which contains very few instances of strokes compared to non-stroke cases, poses a significant challenge. Class imbalance can hinder the development of accurate predictive models, and addressing this issue is crucial for meaningful results. While the absence of missing values is a positive aspect, it doesn't entirely alleviate the concerns related to data quality. The dataset might still contain inaccuracies or inconsistencies that could impact the reliability of any analyses or models.
+<br/>
+##Limitations
+Firstly, the sample size of approximately 5000 observations is relatively modest, potentially limiting the dataset's ability to capture the full complexity of factors influencing stroke occurrence. Larger datasets are generally preferred for healthcare-related studies, particularly when studying rare events like strokes. Additionally, the dataset's imbalanced target variable, which contains very few instances of strokes compared to non-stroke cases, poses a significant challenge. Class imbalance can hinder the development of accurate predictive models, and addressing this issue is crucial for meaningful results. While the absence of missing values is a positive aspect, it doesn't entirely alleviate the concerns related to data quality. The dataset might still contain inaccuracies or inconsistencies that could impact the reliability of any analyses or models.
 
 The choice of features in the dataset is another limitation. It's essential to ensure that all relevant factors influencing stroke occurrence are adequately represented. Furthermore, the categorical variables, like "smoking status" and "work type," might lack more detailed subcategories, potentially missing important nuances in these variables.
 
-Data bias remains a concern, particularly if the dataset is drawn from specific regions or populations. Such bias can restrict the generalizability of findings and models to broader populations or healthcare contexts. The data collection methods used can introduce bias or limitations, especially if the data primarily originates from a specific type of healthcare facility. This can affect the dataset's representativeness and relevance to different healthcare settings.
-
-The dataset might not account for all potential confounding factors, such as family history, genetic predisposition, or specific lifestyle variables, which can significantly impact the likelihood of strokes.
-
-c) How was the information gathered?
-
-We got the stroke dataset from a website called Kaggle, but the website does not say how the data was collected. We tried to contact the person who put the data on Kaggle to learn more, but they did not respond to our messages.
+Data bias remains a concern, particularly if the dataset is drawn from specific regions or populations. Such bias can restrict the generalizability of findings and models to broader populations or healthcare contexts. The data collection methods used can introduce bias or limitations, especially if the data primarily originates from a specific type of healthcare facility. This can affect the dataset's representativeness and relevance to different healthcare settings. The dataset might not account for all potential confounding factors, such as family history, genetic predisposition, or specific lifestyle variables, which can significantly impact the likelihood of strokes.
 
 **Importing and Summary of the Stroke Data**
 
@@ -53,28 +44,18 @@ We got the stroke dataset from a website called Kaggle, but the website does not
 summary(stroke)
 ```
 
-We are choosing on the numerical variable age, average glucose level and BMI.
-
-Age: The mean and median do not have a huge difference, therefore less likely to have outliers.
-Avg_glucose_level: The mean and median have a significant difference and, therefore likely to have outliers.
-BMI: The mean and median do not have a huge difference, therefore less likely to have outliers.
-
 **Checking for missing values in the data**
 
 ```{r Checking for missing values in the data, include=F}
 missing_values <- is.na(stroke)
 summary(missing_values)
 ```
-
-There are no missing values in the data
-
 **Changing the work_type children to unemployed**
 
 ```{r Changing the work_type children to unemployed,include=F}
 stroke$work_type <- ifelse(stroke$work_type == "children", "unemployed", stroke$work_type)
 head(stroke)
 ```
-
 **Changing the all categorical variable to numeric variables**
 
 ```{r}
@@ -97,6 +78,8 @@ final <- stroke
 head(final)
 tail(final)
 ```
+We started by importing the dataset and checking for missing values, which, fortunately, were not found in the data. We then made some data preprocessing steps, including changing the "work_type" category "children" to "unemployed" and converting categorical variables into numerical form. We categorized age into four groups: Children, Students, Adults, and Senior Citizens. This allowed us to analyze the impact of age groups on brain stroke vulnerability.
+
 
 **Introducing the Age Categories**
 
@@ -120,8 +103,7 @@ print(head(stroke))
 bmi_outliers <- ezids::outlierKD2(stroke,bmi, rm=TRUE, boxplt=FALSE, histogram=FALSE, qqplt=TRUE)
 avg_glucose_outliers <- ezids::outlierKD2(stroke,avg_glucose_level, rm=TRUE, boxplt=FALSE, histogram=FALSE, qqplt=TRUE) 
 ```
-
-We have found 43 outliers in BMI and 602 in average glucose level.
+We identified outliers in BMI and average glucose levels using the KD2 method. There were 43 outliers in BMI and 602 outliers in average glucose levels, suggesting potential data anomalies.
 
 **Checking Skewness of Age, BMI and Average Glucose Level**
 
@@ -154,9 +136,6 @@ print(var_glucose)
 var_BMI <- var(stroke$bmi)
 print(var_BMI)
 ```
-
-The standard deviation value suggests that the data for average glucose levels has a wider spread than that of age and BMI. A higher variance implies that the data points deviate more from their respective means, with glucose displaying a greater spread from the mean in contrast to age and BMI.
-
 **Calculating kurtosis for age, average glucose level and BMI**
 
 ```{r}
@@ -171,7 +150,7 @@ kurtosis_BMI <- kurtosis(stroke$bmi)
 print(kurtosis_BMI)
 ```
 
-The kurtosis values for age, average glucose level, and BMI show us the shapes of their distributions. A kurtosis value of 2.004955 for age means that the distribution is close to normal, with balanced tails and a moderate peak. A kurtosis value of 4.74971 for average glucose level suggests a leptokurtic distribution, which means that it has a pronounced central peak and heavier tails, which could mean that there are outliers in the data. A kurtosis value of 2.860614 for BMI points to a mesokurtic distribution, which means that it is similar to a normal curve with moderate tail behavior.
+We calculated various statistical measures like mean, median, standard deviation, variance, skewness, kurtosis, and mode for the variables age, average glucose level, and BMI. These statistics provide insights into the distributions and characteristics of the data. The standard deviation value suggests that the data for average glucose levels has a wider spread than that of age and BMI. A higher variance implies that the data points deviate more from their respective means, with glucose displaying a greater spread from the mean in contrast to age and BMI. The kurtosis values for age, average glucose level, and BMI show us the shapes of their distributions. A kurtosis value of 2.004955 for age means that the distribution is close to normal, with balanced tails and a moderate peak. A kurtosis value of 4.74971 for average glucose level suggests a leptokurtic distribution, which means that it has a pronounced central peak and heavier tails, which could mean that there are outliers in the data. A kurtosis value of 2.860614 for BMI points to a mesokurtic distribution, which means that it is similar to a normal curve with moderate tail behavior.
 
 **Calculation of Mode for age, average glucose level and BMI**
 
@@ -192,7 +171,7 @@ Average glucose level: The mode of 93.88 is a decimal value, which suggests that
 BMI: The modes of 28.7 and 42 may correspond to common BMI values, which suggests that there are two categories or clusters of individuals with similar BMI values.
 
 **Histogram for distribution for Age**
-
+We created histograms to visualize the distributions of age, average glucose level, and BMI. These visualizations helped us understand the shape and characteristics of the data.
 ```{r}
 library(ggplot2)
 ggplot(stroke, aes(x = age)) +
@@ -279,6 +258,7 @@ ggplot(stroke, aes(x = gender, y = avg_glucose_level,color = gender_label)) +
 From this graph we understand that the average glucose level is right skewed.
 
 **What are the age-specific incidence and mortality rates of brain stroke?**
+We conducted a chi-squared test to determine if age and brain stroke are independent. The results revealed that age and brain stroke are not independent. Specifically, the "Senior Citizen" age group had the highest number of brain strokes.
 
 Null Hypothesis(H0): Age and stroke variables are independent.
 
@@ -340,7 +320,7 @@ ggplot(data = brain_stroke_yes_percentage, aes(x = `Category`, y = Percentage, f
 The "Senior Citizen" age group exhibits the highest likelihood of experiencing a brain stroke, accounting for nearly 70% of cases
 
 **What is the case fatality rate of stroke by gender, location, and work type**
-
+A chi-squared test was used to assess the relationship between work type and brain stroke. The results indicated that work type significantly matters in the likelihood of having a brain stroke, with "Private" work type having the highest number of brain strokes.
 Null Hypothesis(H0): Worktype and stroke variables are independent.
 
 Alternative Hypothesis(Ha): Worktype and stroke are not independent.
@@ -506,7 +486,7 @@ chitest_marr_age
 ```
 
 **How do hypertension and heart disease influence brain stroke?**
-
+We examined the influence of hypertension and heart disease on brain stroke using chi-squared tests. The results showed that both hypertension and heart disease were associated with a higher likelihood of experiencing a brain stroke.
 ```{r Percentage wise stroke for hypertension and heart disease}
 # changing the labels of "hypertension"
 # brain_stroke_yes$hypertension <- factor(brain_stroke_yes$hypertension, levels = c("0", "1"), labels = c("no hypertension", "have hypertension"))
@@ -570,7 +550,7 @@ chitest_hyp_heart
 ```
 
 **What are modifiable and non-modifiable risk factors for stroke in healthy people?**<br/>
-We can take features like avg_glucose_level, bmi and smoking_status.
+We analyzed modifiable and non-modifiable risk factors for stroke in healthy individuals by considering average glucose level, BMI, and smoking status. We conducted hypothesis tests and visualizations to understand their relationships with stroke risk. We can take features like avg_glucose_level, bmi and smoking_status.
 ```{r}
 #get responsible features from main dataset
 healthy_features <- stroke[,8:11]
@@ -740,3 +720,21 @@ ggplot(data = df_married_living, aes(x = `married_living`, fill=married_living))
        y = "Count of Brain Strokes") +
   theme(plot.title = element_text(hjust = 0.5))
 ```
+#Conclusion
+This analysis provides valuable insights into factors that influence brain stroke vulnerability. Age, hypertension, heart disease, average glucose levels, and BMI are significant factors associated with an increased risk of brain stroke. Additionally, "Married males" are more prone to stroke. This information can be used to develop preventive measures and interventions to reduce the risk of stroke in susceptible populations.
+
+#Recommendations
+Based on the analysis, we recommend the following:
+
+*Encourage regular health check-ups, especially for individuals with higher average glucose levels.
+*Promote a healthy lifestyle, including maintaining a healthy BMI.
+*Provide targeted awareness campaigns about the risks of stroke among specific age groups.
+*Consider tailored interventions for married males to reduce their stroke risk.
+*By addressing these recommendations, we can potentially reduce the incidence of strokes and improve public health.
+
+#Limitations
+It's important to acknowledge the limitations of this analysis, including potential outliers in the data and the simplifications made in hypothesis testing. Further research and more comprehensive data could refine the findings and recommendations.
+
+
+
+
