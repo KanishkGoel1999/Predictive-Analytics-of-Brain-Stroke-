@@ -129,7 +129,41 @@ var_BMI <- var(stroke$bmi)
 print(var_BMI)
 ```
 
-The data of average glucose level is wide spread compared to age and BMI. A higher variance indicates that the data points are more spread out from the mean, glucose is more spread from mean compared to age and BMI.
+The standard deviation value suggests that the data for average glucose levels has a wider spread than that of age and BMI. A higher variance implies that the data points deviate more from their respective means, with glucose displaying a greater spread from the mean in contrast to age and BMI.
+
+**Calculating kurtosis for age, average glucose level and BMI**
+
+```{r}
+library(moments)
+kurtosis_age <- kurtosis(stroke$age)
+print(kurtosis_age)
+
+kurtosis_glucose <- kurtosis(stroke$avg_glucose_level)
+print(kurtosis_glucose)
+
+kurtosis_BMI <- kurtosis(stroke$bmi)
+print(kurtosis_BMI)
+```
+
+The kurtosis values for age, average glucose level, and BMI show us the shapes of their distributions. A kurtosis value of 2.004955 for age means that the distribution is close to normal, with balanced tails and a moderate peak. A kurtosis value of 4.74971 for average glucose level suggests a leptokurtic distribution, which means that it has a pronounced central peak and heavier tails, which could mean that there are outliers in the data. A kurtosis value of 2.860614 for BMI points to a mesokurtic distribution, which means that it is similar to a normal curve with moderate tail behavior.
+
+**Calculation of Mode for age, average glucose level and BMI**
+
+```{r}
+library(DescTools)
+mode_age <- Mode(stroke$age)
+print(mode_age)
+
+mode_glucose <- Mode(stroke$avg_glucose_level)
+print(mode_glucose)
+
+mode_BMI <- Mode(stroke$bmi)
+print(mode_BMI)
+```
+
+Age: The modes of 78 and 102 suggest that there are two distinct age groups or that these specific ages are common in the dataset.
+Average glucose level: The mode of 93.88 is a decimal value, which suggests that the data was collected precisely or that there are specific measurement practices in place. There is also another mode at 6, which suggests that there is another significant cluster of data points at this level.
+BMI: The modes of 28.7 and 42 may correspond to common BMI values, which suggests that there are two categories or clusters of individuals with similar BMI values.
 
 **Histogram for distribution for Age**
 
