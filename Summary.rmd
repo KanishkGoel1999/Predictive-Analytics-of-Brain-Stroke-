@@ -735,6 +735,6 @@ Based on the analysis, we recommend the following:
 * By addressing these recommendations, we can potentially reduce the incidence of strokes and improve public health.
 
 # References
-Lee, J.-W., Lim, H.-S., Kim, D.-W., Shin, S.-A., Kim, J., Yoo, B., & Cho, K.-H. (2018). The development and implementation of a stroke risk prediction model in National Health Insurance Service's personal health record. Computer Methods and Programs in Biomedicine, 153, 253-257.
-<br/>Yao, Q., Zhang, J., Yan, K., Zheng, Q., Li, Y., Zhang, L., Wu, C., Yang, Y., Zhou, M., & Zhu, C. (2020). Development and validation of a 2-year new-onset stroke risk prediction model for people over age 45 in China. Medicine, 99(41), e22680. https://doi.org/10.1097/MD.0000000000022680
-<br/>Wang, Q., Zhang, L., Li, Y., Tang, X., Yao, Y., & Fang, Q. (2022). Development of a stroke predictive model in the community-dwelling population: A longitudinal cohort study in Southeast China. Frontiers in Aging Neuroscience, 14, Article 1036215. https://doi.org/10.3389/fnagi.2022.1036215
+* Lee, J.-W., Lim, H.-S., Kim, D.-W., Shin, S.-A., Kim, J., Yoo, B., & Cho, K.-H. (2018). The development and implementation of a stroke risk prediction model in National Health Insurance Service's personal health record. Computer Methods and Programs in Biomedicine, 153, 253-257.
+* Yao, Q., Zhang, J., Yan, K., Zheng, Q., Li, Y., Zhang, L., Wu, C., Yang, Y., Zhou, M., & Zhu, C. (2020). Development and validation of a 2-year new-onset stroke risk prediction model for people over age 45 in China. Medicine, 99(41), e22680. https://doi.org/10.1097/MD.0000000000022680
+* Wang, Q., Zhang, L., Li, Y., Tang, X., Yao, Y., & Fang, Q. (2022). Development of a stroke predictive model in the community-dwelling population: A longitudinal cohort study in Southeast China. Frontiers in Aging Neuroscience, 14, Article 1036215. https://doi.org/10.3389/fnagi.2022.1036215
