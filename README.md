@@ -79,27 +79,27 @@ p-value: 0.271, Therefore location and stroke are independent.
 
 - Null hypothesis: Smoking status and stroke are independent
 - Alternative hypothesis: Smoking status and stroke are not independent
-![image](https://github.com/KanishkGoel1999/FA23-DATS6101-Project-Group-6/assets/66896800/18b64910-99f8-4f06-80d1-1d58abb6ba1f)
+![image](https://github.com/KanishkGoel1999/FA23-DATS6101-Project-Group-6/assets/66896800/cd305229-cf15-44f9-8fc5-bcf6bdca057e)
 
 ![image](https://github.com/KanishkGoel1999/FA23-DATS6101-Project-Group-6/assets/66896800/286ec1ea-83db-44f5-8e38-4f396bc86f10)
 
 - Null hypothesis: Stroke and bmi are independent​
 - Alternative hypothesis: Stroke and bmi are not independent
 
-![image](https://github.com/KanishkGoel1999/FA23-DATS6101-Project-Group-6/assets/66896800/139788d2-791d-4cfd-8414-bb9eecbbb25c)
+![image](https://github.com/KanishkGoel1999/FA23-DATS6101-Project-Group-6/assets/66896800/784d747e-2dec-48ee-a916-c3c1e99d8ef4)
 
 ![image](https://github.com/KanishkGoel1999/FA23-DATS6101-Project-Group-6/assets/66896800/bbcdc356-96e5-4692-b86b-344352e14f10)
 
 - Null hypothesis: Stroke and average glucose level are independent​​
 - Alternative hypothesis: Stroke and average glucose level are not independent​​
-​​![image](https://github.com/KanishkGoel1999/FA23-DATS6101-Project-Group-6/assets/66896800/9ab45629-f99c-4d63-97a2-2c280c7f9e17)
+![image](https://github.com/KanishkGoel1999/FA23-DATS6101-Project-Group-6/assets/66896800/5f1cfa73-dfbd-4621-b2c4-904eede79294)
 
 ![image](https://github.com/KanishkGoel1999/FA23-DATS6101-Project-Group-6/assets/66896800/312a4252-6cc4-48df-aaa1-ea6e24024bf2)
 
 ![image](https://github.com/KanishkGoel1999/FA23-DATS6101-Project-Group-6/assets/66896800/7c24e032-06fc-4267-bfd2-5f03e3d57acc)
 
--  hypothesis: Stroke and marriage status are independent​​​
+- Null Hypothesis: Stroke and marriage status are independent​​​
 - Alternate hypothesis: Stroke and marriage status are not independent​​​
-​​​![image](https://github.com/KanishkGoel1999/FA23-DATS6101-Project-Group-6/assets/66896800/fc7d60ea-d500-478f-b7a5-8b737cf9d163)
+![image](https://github.com/KanishkGoel1999/FA23-DATS6101-Project-Group-6/assets/66896800/a9e7db50-17b0-47a5-9bdc-50942f93d702)
 
 ![image](https://github.com/KanishkGoel1999/FA23-DATS6101-Project-Group-6/assets/66896800/88d5f1e7-7133-4212-aea9-b4c8ac433aac)
