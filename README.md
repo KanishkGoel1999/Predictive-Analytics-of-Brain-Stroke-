@@ -1,5 +1,8 @@
 # Predictive Analytics of Brain Stroke  
+
 We aim to examine how diverse factors such as gender, age, health conditions, lifestyle, and social variables influence brain stroke susceptibility. The study's results are vital for assessing stroke risk, shaping public health strategies, guiding medical interventions, and informing healthcare policies.
+
+![stroke_prediction_presentation](https://github.com/KanishkGoel1999/FA23-DATS6101-Project-Group-6/assets/66896800/f347c2a3-4849-4cbb-97be-0ea27e059231)
 
 # Data
 ![image](https://github.com/KanishkGoel1999/FA23-DATS6101-Project-Group-6/assets/66896800/3cbbd462-5533-4261-b8ce-2a481ee2e2d4)
