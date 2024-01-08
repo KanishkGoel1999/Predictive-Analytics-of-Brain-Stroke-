@@ -18,3 +18,44 @@ We aim to examine how diverse factors such as gender, age, health conditions, li
 # Introducing a new column called Age categories
 ![image](https://github.com/KanishkGoel1999/FA23-DATS6101-Project-Group-6/assets/66896800/88ccd58d-136c-468b-a13c-4f56e5911134)
 
+## Distribution of BMI and Avg Glucose Level
+![image](https://github.com/KanishkGoel1999/FA23-DATS6101-Project-Group-6/assets/66896800/ac4a193f-6b81-4e8c-93fe-5fcb348a02ed)
+![image](https://github.com/KanishkGoel1999/FA23-DATS6101-Project-Group-6/assets/66896800/ad35add6-7b24-4f93-85f7-22b42dbd508a)
+
+## Box Plot of BMI by Gender
+![image](https://github.com/KanishkGoel1999/FA23-DATS6101-Project-Group-6/assets/66896800/65c2641b-f377-4218-ad7e-29f166eb1632)
+![image](https://github.com/KanishkGoel1999/FA23-DATS6101-Project-Group-6/assets/66896800/ae89d0af-9d81-4889-b981-d52e15d68f7d)
+
+# 1. Does brain stroke depend on age group?
+- Null Hypothesis(H0): Age groups and stroke variables are independent.
+- Alternate Hypothesis(H1): Age group and stroke are not independent
+![image](https://github.com/KanishkGoel1999/FA23-DATS6101-Project-Group-6/assets/66896800/374241da-2f65-43c4-a7e7-e5d6076366e7)
+
+## Hypothesis Test Says: Age group and stroke are dependent
+![image](https://github.com/KanishkGoel1999/FA23-DATS6101-Project-Group-6/assets/66896800/3f9baaef-bc30-471d-82d5-1f709cd819eb)
+
+# 2. What is the case fatality rate of stroke by gender, location, and work type?
+- Null Hypothesis(H0): Work type and stroke variables are independent.
+- Alternate Hypothesis(H1): Work type and stroke are not independent.
+![image](https://github.com/KanishkGoel1999/FA23-DATS6101-Project-Group-6/assets/66896800/184f3eb2-6702-4f96-9aed-fe15cce192a2)
+
+## Hypothesis Test Says: Work type and stroke are dependent
+![image](https://github.com/KanishkGoel1999/FA23-DATS6101-Project-Group-6/assets/66896800/d343cb1e-9241-4606-a4a2-9f5ba0150358)
+
+Null Hypothesis(H0): Gender and stroke variables are independent.
+Alternate Hypothesis(H1): Gender and stroke are not independent.
+
+p-value: 0.575, Therefore gender and stroke are independent.
+
+Null Hypothesis(H0): Location and stroke variables are independent.
+Alternate Hypothesis(H1): Location and stroke are not independent.
+
+p-value: 0.271, Therefore location and stroke are independent.
+
+![image](https://github.com/KanishkGoel1999/FA23-DATS6101-Project-Group-6/assets/66896800/dfb49aa6-4a03-4434-8538-17d48af1b227)
+
+# 3. Are there any biological or social factors that explain the gender differences in stroke risk?
+- Null hypothesis(H0): ever_married and stroke variables are independent
+- Alternative hypothesis(H1): ever_married and stroke variables are not independent
+![image](https://github.com/KanishkGoel1999/FA23-DATS6101-Project-Group-6/assets/66896800/32b5ba76-73a0-4477-9fb6-2ce490bfde6e)
+
