@@ -63,8 +63,8 @@ p-value: 0.271, Therefore location and stroke are independent.
 ![image](https://github.com/KanishkGoel1999/FA23-DATS6101-Project-Group-6/assets/66896800/61f4664a-7009-472f-bed3-2c4bdf782e39)
 
 ## Chi-squared test between ever-married and age period
-Null hypothesis(H0): ever_married and age are independent
-Alternative hypothesis(H1): ever_married and age are not independent
+- Null hypothesis(H0): ever_married and age are independent
+- Alternative hypothesis(H1): ever_married and age are not independent
 ![image](https://github.com/KanishkGoel1999/FA23-DATS6101-Project-Group-6/assets/66896800/8a5f03f0-abcc-4ec4-a533-cdedd14f26f2)
 
 # 4. What is the strength of the association between hypertension, heart disease, and brain stroke?
@@ -77,3 +77,29 @@ Alternative hypothesis(H1): ever_married and age are not independent
 # What are modifiable risk factors for stroke in healthy people?
 ![image](https://github.com/KanishkGoel1999/FA23-DATS6101-Project-Group-6/assets/66896800/2237b0af-601a-44b1-bc54-501d6ac90378)
 
+- Null hypothesis: Smoking status and stroke are independent
+- Alternative hypothesis: Smoking status and stroke are not independent
+![image](https://github.com/KanishkGoel1999/FA23-DATS6101-Project-Group-6/assets/66896800/18b64910-99f8-4f06-80d1-1d58abb6ba1f)
+
+![image](https://github.com/KanishkGoel1999/FA23-DATS6101-Project-Group-6/assets/66896800/286ec1ea-83db-44f5-8e38-4f396bc86f10)
+
+- Null hypothesis: Stroke and bmi are independent​
+- Alternative hypothesis: Stroke and bmi are not independent
+
+![image](https://github.com/KanishkGoel1999/FA23-DATS6101-Project-Group-6/assets/66896800/139788d2-791d-4cfd-8414-bb9eecbbb25c)
+
+![image](https://github.com/KanishkGoel1999/FA23-DATS6101-Project-Group-6/assets/66896800/bbcdc356-96e5-4692-b86b-344352e14f10)
+
+- Null hypothesis: Stroke and average glucose level are independent​​
+- Alternative hypothesis: Stroke and average glucose level are not independent​​
+​​![image](https://github.com/KanishkGoel1999/FA23-DATS6101-Project-Group-6/assets/66896800/9ab45629-f99c-4d63-97a2-2c280c7f9e17)
+
+![image](https://github.com/KanishkGoel1999/FA23-DATS6101-Project-Group-6/assets/66896800/312a4252-6cc4-48df-aaa1-ea6e24024bf2)
+
+![image](https://github.com/KanishkGoel1999/FA23-DATS6101-Project-Group-6/assets/66896800/7c24e032-06fc-4267-bfd2-5f03e3d57acc)
+
+-  hypothesis: Stroke and marriage status are independent​​​
+- Alternate hypothesis: Stroke and marriage status are not independent​​​
+​​​![image](https://github.com/KanishkGoel1999/FA23-DATS6101-Project-Group-6/assets/66896800/fc7d60ea-d500-478f-b7a5-8b737cf9d163)
+
+![image](https://github.com/KanishkGoel1999/FA23-DATS6101-Project-Group-6/assets/66896800/88d5f1e7-7133-4212-aea9-b4c8ac433aac)
