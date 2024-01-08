@@ -59,3 +59,21 @@ p-value: 0.271, Therefore location and stroke are independent.
 - Alternative hypothesis(H1): ever_married and stroke variables are not independent
 ![image](https://github.com/KanishkGoel1999/FA23-DATS6101-Project-Group-6/assets/66896800/32b5ba76-73a0-4477-9fb6-2ce490bfde6e)
 
+## Bar Plot of Percentage of Strokes by Ever-married or Not
+![image](https://github.com/KanishkGoel1999/FA23-DATS6101-Project-Group-6/assets/66896800/61f4664a-7009-472f-bed3-2c4bdf782e39)
+
+## Chi-squared test between ever-married and age period
+Null hypothesis(H0): ever_married and age are independent
+Alternative hypothesis(H1): ever_married and age are not independent
+![image](https://github.com/KanishkGoel1999/FA23-DATS6101-Project-Group-6/assets/66896800/8a5f03f0-abcc-4ec4-a533-cdedd14f26f2)
+
+# 4. What is the strength of the association between hypertension, heart disease, and brain stroke?
+![image](https://github.com/KanishkGoel1999/FA23-DATS6101-Project-Group-6/assets/66896800/f983d07a-ce6b-41cc-87f9-ac49587f7b31)
+![image](https://github.com/KanishkGoel1999/FA23-DATS6101-Project-Group-6/assets/66896800/40cebb37-94e1-4d22-b640-87b7122690a7)
+
+## Hypothesis Test Says: Hypertension, heart disease and stroke are all related.
+![image](https://github.com/KanishkGoel1999/FA23-DATS6101-Project-Group-6/assets/66896800/1c16ee67-ced8-4742-a00a-e9779a01dc67)
+
+# What are modifiable risk factors for stroke in healthy people?
+![image](https://github.com/KanishkGoel1999/FA23-DATS6101-Project-Group-6/assets/66896800/2237b0af-601a-44b1-bc54-501d6ac90378)
+
